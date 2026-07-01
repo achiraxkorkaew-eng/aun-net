@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบบันทึกรายรับ-รายจ่าย & หุ้น & ภาษี อั๋น v16.0 (Salary Edition)</title>
+    <title>ระบบบันทึกรายรับ-รายจ่าย & หุ้น & ภาษี อั๋น v17.0 (Custom Salary Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -86,7 +86,7 @@
     <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold tracking-tight">ระบบบันทึกรายรับ-รายจ่าย 🚀</h1>
-            <p class="text-indigo-200 text-sm mt-1">รุ่นสำหรับพนักงานเงินเดือน (Salary Edition)</p>
+            <p class="text-indigo-200 text-sm mt-1">รุ่นสำหรับพนักงานเงินเดือน (Salary Edition v17.0)</p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
             <button onclick="openBackupModal()" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-4 rounded-xl text-sm transition shadow-lg border border-indigo-400/50 flex items-center gap-2">☁️ แบ็คอัพ</button>
@@ -109,56 +109,55 @@
         <button class="tab-btn px-5 py-3 rounded-xl font-semibold text-sm whitespace-nowrap bg-white text-slate-600 hover:bg-slate-100 transition-all duration-200 border border-slate-200" onclick="switchTab(event, 'tab7')">5. แดชบอร์ด 📊</button>
     </div>
 
-    <!-- TAB 1: รายรับเงินเดือน -->
     <div id="tab1" class="tab-panel block">
-        <!-- รหัสส่วน TAB 1 เหมือนเดิมทุกอย่าง กูไม่ได้ลบอะไรทิ้ง -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
-            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-6 rounded-2xl shadow-sm"><span class="text-xs font-bold uppercase tracking-wider opacity-80">รวมรายรับทั้งหมดเดือนนี้</span><div class="text-3xl font-bold mt-1" id="t1-month-income">0.00 บาท</div><div class="text-[11px] mt-2 opacity-90" id="t1-month-info">กำลังโหลด...</div></div>
-            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-6 rounded-2xl shadow-sm"><span class="text-xs font-bold uppercase tracking-wider opacity-80" id="t1-year-summary-title">รายรับสะสมรายปีนี้</span><div class="text-2xl font-black mt-1" id="t1-year-net-accumulated">0.00 บาท</div><div class="text-[11px] mt-2 opacity-90">ยอดรวมทั้งปี</div></div>
-            <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm flex flex-col justify-center"><span class="text-xs font-bold text-slate-400 uppercase tracking-wider">รายรับเฉลี่ยต่อเดือน (ปีนี้)</span><div class="text-2xl font-bold text-indigo-600 mt-1" id="t1-avg-income">0.00 บาท</div><div class="text-xs mt-2 opacity-95 text-slate-500" id="t1-year-display">กำลังโหลด...</div></div>
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-6 rounded-2xl shadow-sm"><span class="text-xs font-bold uppercase tracking-wider opacity-80">รวมรายรับจริงทั้งหมดเดือนนี้</span><div class="text-3xl font-bold mt-1" id="t1-month-income">0.00 บาท</div><div class="text-[11px] mt-2 opacity-90" id="t1-month-info">กำลังโหลด...</div></div>
+            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-6 rounded-2xl shadow-sm"><span class="text-xs font-bold uppercase tracking-wider opacity-80" id="t1-year-summary-title">รายรับจริงสะสมรายปีนี้</span><div class="text-2xl font-black mt-1" id="t1-year-net-accumulated">0.00 บาท</div><div class="text-[11px] mt-2 opacity-90">ยอดรวมจริงทั้งปีหลังหักสำรอง</div></div>
+            <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm flex flex-col justify-center"><span class="text-xs font-bold text-slate-400 uppercase tracking-wider">รายรับจริงเฉลี่ยต่อเดือน (ปีนี้)</span><div class="text-2xl font-bold text-indigo-600 mt-1" id="t1-avg-income">0.00 บาท</div><div class="text-xs mt-2 opacity-95 text-slate-500" id="t1-year-display">กำลังโหลด...</div></div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="space-y-6">
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm h-fit">
-                    <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-4">📝 บันทึกรายรับเพิ่มเติม</h2>
+                    <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-4">📝 บันทึกรายรับประจำเดือน</h2>
                     <form id="income-form" onsubmit="addIncome(event)" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
-                                <span>ประเภทรายรับ</span>
-                                <button type="button" onclick="toggleEditIncomeCat()" class="text-[10px] text-indigo-500 font-bold hover:underline" id="btn-edit-inc-cat">✏️ แก้ไข/ลบ</button>
-                            </label>
-                            <input type="hidden" id="inc-category-select" required>
-                            <div id="inc-cat-tags" class="flex flex-wrap gap-1.5 mb-2 transition-all"></div>
-                            <div class="flex gap-1.5 mt-2">
-                                <input type="text" id="new-inc-cat-input" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs outline-none focus:border-indigo-400" placeholder="พิมพ์ชื่อประเภทใหม่...">
-                                <button type="button" onclick="addIncomeCategory()" class="bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs hover:bg-indigo-600 transition">➕</button>
-                            </div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5">รายละเอียดความต้องการ (ถ้ามี)</label>
+                            <input type="text" class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm outline-none focus:border-indigo-500" id="inc-detail" placeholder="บันทึกช่วยจำ...">
                         </div>
-                        <div><label class="block text-xs font-bold text-slate-500 mb-1.5">รายละเอียด (ถ้ามี)</label><input type="text" class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm outline-none focus:border-indigo-500" id="inc-detail" placeholder="-"></div>
-                        <div><label class="block text-xs font-bold text-slate-500 mb-1.5">รายรับ (บาท)</label><input type="number" step="0.01" class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm outline-none focus:border-indigo-500" id="inc-amount" value="0" required></div>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition">บันทึกรายการ 💾</button>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5">เงินเดือน (บาท)</label>
+                            <input type="number" step="0.01" class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-indigo-500" id="inc-amount" placeholder="กรอกเงินเดือน..." oninput="updateLiveIncomeResult()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-rose-500 mb-1.5">รายการหักสำรองของบริษัท (บาท)</label>
+                            <input type="number" step="0.01" class="w-full bg-rose-50 border border-rose-100 text-rose-700 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-rose-500" id="inc-reserve" placeholder="กรอกยอดหักสำรอง..." oninput="updateLiveIncomeResult()">
+                        </div>
+
+                        <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100 mt-2">
+                            <span class="text-[11px] font-bold text-indigo-500 uppercase tracking-wider block">ผลลัพธ์: รายรับจริงของเดือนนี้</span>
+                            <div class="text-xl font-black text-indigo-950 mt-1" id="live-income-real-display">0.00 ฿</div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-sm">บันทึกรายการ 💾</button>
                     </form>
                 </div>
             </div>
             
             <div class="lg:col-span-2 space-y-6">
-                <!-- ตารางรายรับสรุป 12 เดือนรวด -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                     <h2 class="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-3 flex justify-between items-center">
                         <span>ตารางสรุปรายรับประจำปี (รายเดือน)</span>
                         <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded font-bold" id="inc-table-year-lbl">ปีปัจจุบัน</span>
                     </h2>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[700px]">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
                                 <tr class="bg-slate-900 text-white text-xs uppercase tracking-wider">
                                     <th class="p-3 font-bold rounded-tl-lg">เดือน</th>
                                     <th class="p-3 font-bold text-right">เงินเดือน</th>
-                                    <th class="p-3 font-bold text-right">ค่าคอม</th>
-                                    <th class="p-3 font-bold text-right">โบนัส</th>
-                                    <th class="p-3 font-bold text-right">อื่นๆ</th>
-                                    <th class="p-3 font-bold text-right text-emerald-400 rounded-tr-lg">รวมรายรับสุทธิ</th>
+                                    <th class="p-3 font-bold text-right text-rose-300">รายการหักสำรองของบริษัท</th>
+                                    <th class="p-3 font-bold text-right text-emerald-400 rounded-tr-lg">รายรับจริงของเดือนนี้</th>
                                 </tr>
                             </thead>
                             <tbody id="income-12m-table-body" class="text-sm divide-y divide-slate-100"></tbody>
@@ -167,28 +166,24 @@
                     </div>
                 </div>
 
-                <!-- แดชบอร์ดเปรียบเทียบเดือน (Mini Dashboard) -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                    <h2 class="text-sm font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2">📊 เปรียบเทียบรายรับแต่ละเดือน (MoM)</h2>
+                    <h2 class="text-sm font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2">📊 เปรียบเทียบรายรับจริงแต่ละเดือน (MoM)</h2>
                     <div class="relative w-full h-[250px]"><canvas id="miniIncomeChart"></canvas></div>
                 </div>
                 
-                <!-- ตารางประวัติรายรับแบบละเอียด เพื่อให้แก้ไข/ลบได้ -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mt-6">
-                    <h2 class="text-sm font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2">📋 ประวัติบันทึกรายรับของเดือนนี้ (แก้ไข/ลบ)</h2>
+                    <h2 class="text-sm font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2">📋 ประวัติบันทึกรายรับของเดือนนี้</h2>
                     <div class="overflow-x-auto max-h-[300px] overflow-y-auto">
                         <table class="w-full text-left border-collapse min-w-[500px]">
-                            <thead><tr class="bg-slate-50 text-slate-400 text-xs uppercase tracking-wider sticky top-0"><th class="p-2">ประเภท</th><th class="p-2">รายละเอียด</th><th class="p-2 text-right">จำนวนเงิน</th><th class="p-2 text-center">จัดการ</th></tr></thead>
+                            <thead><tr class="bg-slate-50 text-slate-400 text-xs uppercase tracking-wider sticky top-0"><th class="p-2">รายละเอียด</th><th class="p-2 text-right">เงินเดือน</th><th class="p-2 text-right text-rose-500">หักสำรอง</th><th class="p-2 text-right text-indigo-600">รายรับจริง</th><th class="p-2 text-center">จัดการ</th></tr></thead>
                             <tbody id="income-detail-table-body" class="text-sm divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- TAB 4: รายจ่ายส่วนตัว -->
     <div id="tab4" class="tab-panel hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
             <div class="bg-gradient-to-br from-rose-500 to-red-600 text-white p-6 rounded-2xl shadow-sm flex flex-col justify-between">
@@ -200,9 +195,9 @@
             </div>
             
             <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col justify-center">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">สัดส่วนรายจ่ายเทียบกับรายรับเดือนนี้</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">สัดส่วนรายจ่ายเทียบกับรายรับจริงเดือนนี้</span>
                 <div class="text-3xl font-bold text-rose-600 mt-1" id="t4-expense-ratio">0.00%</div>
-                <div class="text-[11px] mt-2 text-slate-500">ของรายรับทั้งหมดในเดือนปัจจุบัน</div>
+                <div class="text-[11px] mt-2 text-slate-500">ของรายรับจริงในเดือนปัจจุบัน</div>
             </div>
 
             <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-6 rounded-2xl shadow-sm flex flex-col justify-between">
@@ -282,9 +277,7 @@
         </div>
     </div>
 
-    <!-- TAB 5: หุ้น -->
     <div id="tab5" class="tab-panel hidden">
-        <!-- รหัสส่วน TAB 5 เหมือนเดิม -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
             <div class="bg-gradient-to-br from-indigo-500 to-blue-600 text-white p-6 rounded-2xl shadow-sm"><span class="text-xs font-bold uppercase tracking-wider opacity-80">มูลค่าธุรกรรมรวมทั้งหมดเดือนนี้ (หักค่าธรรมเนียมแล้ว)</span><div class="text-3xl font-bold mt-1" id="t5-month-stock-turnover">0.00 บาท</div></div>
         </div>
@@ -297,7 +290,7 @@
                 <form id="stock-form" onsubmit="addStockTransaction(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1.5 flex justify-between">
-                            <span>ชื่อย่อหุ้น / สินทรัพย์ <span class="text-[10px] font-normal text-slate-400">(คลิกเลือกแท็กด้านล่าง)</span></span>
+                            <span>ชื่อย่อหุ้น / สินทรัพย์</span>
                             <button type="button" onclick="toggleEditStockTags()" class="text-[10px] text-indigo-500 font-bold hover:underline" id="btn-edit-stock-tags">✏️ แก้ไข/ลบ</button>
                         </label>
                         <input type="text" class="w-full bg-slate-50 border rounded-xl px-4 py-2.5 text-sm uppercase font-bold text-indigo-900 focus:border-indigo-500 outline-none" id="stock-name" required>
@@ -375,7 +368,6 @@
         </div>
     </div>
     
-    <!-- TAB 6: ภาษีบุคคลธรรมดา 2569 -->
     <div id="tab6" class="tab-panel hidden space-y-6">
         <div class="bg-white p-6 rounded-3xl border border-indigo-100 shadow-sm w-full">
             <h3 class="text-xl font-bold text-indigo-950 flex items-center gap-2 border-b pb-3 mb-4">
@@ -383,11 +375,9 @@
             </h3>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- ส่วนลดหย่อนภาษี (ฝั่งซ้าย) -->
                 <div class="space-y-4">
-                    <h4 class="text-sm font-bold text-slate-700 bg-slate-100 p-2 rounded-lg">หมวดหมู่ลดหย่อนภาษี (แก้ไขและเพิ่มลดเองได้ตามจริง)</h4>
+                    <h4 class="text-sm font-bold text-slate-700 bg-slate-100 p-2 rounded-lg">หมวดหมู่ลดหย่อนภาษี</h4>
                     
-                    <!-- 1. ส่วนตัว/ครอบครัว -->
                     <div class="bg-white border border-slate-200 rounded-xl p-4">
                         <div class="font-bold text-indigo-800 text-xs mb-3 flex justify-between items-center">
                             <span>1. ส่วนตัวและครอบครัว</span>
@@ -399,12 +389,10 @@
                             <div class="flex items-center justify-between text-xs"><span>บุตร (คนละ 30k/60k)</span><input type="number" id="tax-deduct-child" value="0" class="w-24 border border-indigo-200 rounded px-2 py-1 text-right font-bold focus:outline-none focus:border-indigo-500" onchange="calculateTax2569()"></div>
                             <div class="flex items-center justify-between text-xs"><span>บิดามารดา (คนละ 30k)</span><input type="number" id="tax-deduct-parents" value="0" class="w-24 border border-indigo-200 rounded px-2 py-1 text-right font-bold focus:outline-none focus:border-indigo-500" onchange="calculateTax2569()"></div>
                         </div>
-                        <!-- โซนรายการไดนามิก (มึงเพิ่มเองได้) -->
                         <div id="tax-dyn-1" class="space-y-2 mt-2 border-t border-slate-100 pt-2 empty:hidden"></div>
                         <button onclick="addDynamicTaxItem(1)" class="mt-2 text-[10px] text-indigo-500 font-bold hover:underline w-full text-left">➕ เพิ่มรายการอื่นๆ ในหมวดนี้</button>
                     </div>
 
-                    <!-- 2. ประกัน -->
                     <div class="bg-white border border-slate-200 rounded-xl p-4">
                         <div class="font-bold text-emerald-800 text-xs mb-3">2. ประกันชีวิตและสุขภาพ</div>
                         <div class="space-y-2">
@@ -417,7 +405,6 @@
                         <button onclick="addDynamicTaxItem(2)" class="mt-2 text-[10px] text-emerald-600 font-bold hover:underline w-full text-left">➕ เพิ่มรายการอื่นๆ ในหมวดนี้</button>
                     </div>
 
-                    <!-- 3. กองทุนและออม -->
                     <div class="bg-white border border-slate-200 rounded-xl p-4">
                         <div class="font-bold text-blue-800 text-xs mb-3">3. กองทุนและการลงทุน (เพื่อเกษียณ)</div>
                         <div class="space-y-2">
@@ -429,7 +416,6 @@
                         <button onclick="addDynamicTaxItem(3)" class="mt-2 text-[10px] text-blue-600 font-bold hover:underline w-full text-left">➕ เพิ่มรายการอื่นๆ ในหมวดนี้</button>
                     </div>
 
-                    <!-- 4,5,6 หมวดอื่นๆ -->
                     <div class="bg-white border border-slate-200 rounded-xl p-4">
                         <div class="font-bold text-amber-800 text-xs mb-3">4. อสังหาฯ / บริจาค / รัฐบาล</div>
                         <div class="space-y-2">
@@ -440,15 +426,13 @@
                         <div id="tax-dyn-4" class="space-y-2 mt-2 border-t border-slate-100 pt-2 empty:hidden"></div>
                         <button onclick="addDynamicTaxItem(4)" class="mt-2 text-[10px] text-amber-600 font-bold hover:underline w-full text-left">➕ เพิ่มรายการอื่นๆ ในหมวดนี้</button>
                     </div>
-                    
                 </div>
 
-                <!-- สรุปผลคำนวณ (ฝั่งขวา) -->
                 <div class="space-y-6">
                     <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-100">
                         <h4 class="text-sm font-bold text-indigo-900 mb-4 border-b border-indigo-200 pb-2">สรุปเงินได้และการหักลดหย่อน</h4>
                         <div class="space-y-3 text-sm">
-                            <div class="flex justify-between"><span>รายรับรวมทั้งปี (เงินเดือน+โบนัส+คอม):</span><span class="font-bold text-slate-800" id="tax-gross-income">0 ฿</span></div>
+                            <div class="flex justify-between"><span>รายรับรวมจริงทั้งปี (หลังหักสำรอง):</span><span class="font-bold text-slate-800" id="tax-gross-income">0 ฿</span></div>
                             <div class="flex justify-between text-slate-500 text-xs"><span>หักค่าใช้จ่ายเหมา (50% ไม่เกิน 100,000):</span><span class="font-bold text-rose-500" id="tax-expense-deduct">-0 ฿</span></div>
                             <div class="flex justify-between text-slate-500 text-xs"><span>หักลดหย่อนรวมทั้งหมดที่กรอก:</span><span class="font-bold text-rose-500" id="tax-total-deduct">-60,000 ฿</span></div>
                             <div class="flex justify-between border-t border-indigo-200 pt-3 font-bold mt-2"><span>เงินได้สุทธิประเมินภาษี:</span><span class="text-indigo-900 text-lg" id="tax-net-income">0 ฿</span></div>
@@ -458,9 +442,7 @@
                     <div class="bg-white p-5 rounded-2xl border-2 border-slate-800 relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-slate-800 text-white text-[10px] px-3 py-1 font-bold rounded-bl-lg">ผลประเมินปีภาษี</div>
                         <h4 class="text-sm font-bold text-slate-800 mb-4">ขั้นบันไดภาษีที่ต้องเสีย</h4>
-                        <div class="space-y-1.5 text-xs text-slate-600 font-mono mb-4 border-b border-slate-100 pb-4" id="tax-step-details">
-                            <!-- จะถูก render ด้วย JS -->
-                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-600 font-mono mb-4 border-b border-slate-100 pb-4" id="tax-step-details"></div>
                         
                         <div class="flex justify-between items-center text-sm font-bold text-slate-700">
                             <span>ภาษีที่คำนวณได้ทั้งหมด:</span>
@@ -481,13 +463,11 @@
         </div>
     </div>
 
-    <!-- TAB 7: DASHBOARD -->
     <div id="tab7" class="tab-panel hidden space-y-8">
-        <!-- รหัสส่วน DASHBOARD เหมือนเดิมทั้งหมด -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
                 <div>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">รายรับเฉลี่ย / เดือน</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">รายรับจริงเฉลี่ย / เดือน</span>
                     <div class="text-xl font-extrabold text-emerald-600" id="dash-avg-inc">0 ฿</div>
                 </div>
                 <div class="text-[10px] text-slate-400 mt-1 border-t pt-1">ประเมินจากยอดสะสมจริงปีนี้</div>
@@ -526,12 +506,10 @@
         
         <div class="space-y-6 bg-slate-50/50 p-4 rounded-b-xl border border-slate-200 border-t-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
                 <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div class="flex justify-between items-center border-b border-slate-100 pb-2 mb-2">
                         <span class="text-sm font-bold text-slate-900 flex items-center gap-1.5">🚨 ระบบเตือนภัยพฤติกรรมใช้จ่าย</span>
                     </div>
-                    
                     <div id="p-mom-warning-box" class="p-3 rounded-xl border relative mb-3 transition-colors">
                         <div class="flex justify-between items-center">
                             <span class="text-[11px] font-bold" id="p-mom-warning-title-text">เทรนด์รายจ่ายกระเป๋าฉีก MoM</span>
@@ -540,7 +518,6 @@
                         <div class="text-lg font-black mt-1" id="p-mom-warning-title">สถานะปกติ</div>
                         <p class="text-[10px] mt-1" id="p-mom-warning-desc">เทียบรายจ่ายทั่วไปเดือนนี้กับค่าเฉลี่ย 3 เดือนล่าสุด</p>
                     </div>
-
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-pink-900">💳 ตรวจจับหนี้บัตร:</span>
                         <span class="font-black" id="p-credit-card-warning">ปลอดภัย</span>
@@ -552,16 +529,32 @@
                     <div class="flex justify-between items-start border-b border-slate-100 pb-2 mb-2">
                         <span class="text-sm font-bold text-emerald-950 flex items-center gap-1.5">👨‍🚀 ถ้าตกงานจะอยู่ได้อีก...</span>
                     </div>
-                    
                     <div class="text-center my-3">
                         <span class="text-3xl font-black text-emerald-600 block tracking-tight" id="p-survival-months">0 ปี 0 เดือน</span>
                         <span class="text-[10px] font-bold px-3 py-1 rounded-full inline-block mt-2 transition-colors" id="p-survival-rating">กำลังประเมิน...</span>
                     </div>
-                    
                     <div class="text-[9px] text-slate-400 text-center border-t border-slate-100 pt-2 leading-tight">
                         * ประเมินจากพอร์ตลงทุน: <span class="font-bold text-emerald-600" id="p-survival-assets-display">0 ฿</span><br>
                         (คิดเหมาเรทผลาญรวม = จ่ายทั่วไป + ออมลงทุน)
                     </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">💼 เจาะลึกแหล่งที่มารายรับจริง</h3>
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <div class="relative w-full sm:w-[45%] h-[220px]"><canvas id="dashIncomeTypeChart"></canvas></div>
+                        <div class="w-full sm:w-[55%]" id="dash-income-type-list"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-700 mb-1 flex items-center gap-2">🛡️ รายการหักสำรองของบริษัทรายเดือน</h3>
+                        <div class="text-xs text-slate-400 mb-3">ยอดรวมสะสม All-Timeตั้งแต่ต้น: <span id="dash-total-reserve-alltime" class="font-bold text-rose-600 text-sm">0 ฿</span></div>
+                    </div>
+                    <div class="relative w-full h-[180px]"><canvas id="dashReserveMonthlyChart"></canvas></div>
                 </div>
             </div>
 
@@ -573,18 +566,15 @@
                         <div class="w-full sm:w-[55%]" id="dash-expense-pie-list"></div>
                     </div>
                 </div>
-
+                
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">💼 เจาะลึกแหล่งที่มารายรับ</h3>
-                    <div class="flex flex-col sm:flex-row items-center gap-4">
-                        <div class="relative w-full sm:w-[45%] h-[220px]"><canvas id="dashIncomeTypeChart"></canvas></div>
-                        <div class="w-full sm:w-[55%]" id="dash-income-type-list"></div>
-                    </div>
+                    <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">รายรับรวมรายไตรมาส (ปีนี้ vs ปีก่อน)</h3>
+                    <div class="relative w-full h-[220px]"><canvas id="dashQuarterlyChart"></canvas></div>
                 </div>
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">💸 รายรับ VS รายจ่าย ประจำปีนี้</h3>
+                <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">💸 รายรับจริง VS รายจ่าย ประจำปีนี้</h3>
                 <div class="relative w-full h-[300px]"><canvas id="dashCashflowChart"></canvas></div>
             </div>
 
@@ -594,22 +584,16 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">รายรับรวมรายไตรมาส (ปีนี้ vs ปีก่อน)</h3>
-                    <div class="relative w-full h-[250px]"><canvas id="dashQuarterlyChart"></canvas></div>
-                </div>
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
                     <h3 class="text-sm font-bold text-slate-700 mb-1 text-center" id="dash-yoy-title">เปรียบเทียบการเติบโตรายปี (YoY)</h3>
                     <div class="text-center mb-3 text-sm font-black" id="dash-yoy-diff-text"></div>
                     <div class="relative w-full flex-1 min-h-[200px]"><canvas id="dashYoYChart"></canvas></div>
                 </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">รายรับเปรียบเทียบรายปี (ตั้งแต่ปี 66 - ปัจจุบัน)</h3>
+                    <div class="relative w-full h-[220px]"><canvas id="dashYearlyIncomeChart"></canvas></div>
+                </div>
             </div>
-
-            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">รายรับเปรียบเทียบรายปี (ตั้งแต่ปี 66 - ปัจจุบัน)</h3>
-                <div class="relative w-full h-[300px]"><canvas id="dashYearlyIncomeChart"></canvas></div>
-            </div>
-            
         </div>
 
         <div class="bg-slate-100 p-3 rounded-t-xl mt-12 border-b-2 border-indigo-500">
@@ -619,7 +603,10 @@
         <div class="space-y-6 bg-slate-50/50 p-4 rounded-b-xl border border-slate-200 border-t-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center">
-                    <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">💼 มูลค่าพอร์ตลงทุน (หุ้น, กองทุน, แบงก์)</h3>
+                    <div class="border-b pb-2 mb-2">
+                        <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">💼 มูลค่าพอร์ตลงทุน (หุ้น, กองทุน, แบงก์)</h3>
+                        <div class="text-xs text-slate-400 mt-0.5">มูลค่าพอร์ตสะสมสุทธิ All-Time: <span id="dash-total-assets-alltime" class="font-bold text-indigo-600 text-sm">0 ฿</span></div>
+                    </div>
                     <div class="relative w-full h-[200px]"><canvas id="dashAssetTypeChart"></canvas></div>
                 </div>
 
@@ -630,7 +617,6 @@
                             <span class="text-[11px] font-black" id="p-target-weight-total">เป้าหมาย 100%</span>
                         </h3>
                         <p class="text-[10px] text-slate-500 mt-1.5">เลื่อนสไลเดอร์คุมเป้าหมาย ระบบวิเคราะห์ความสมดุลให้ออโต้</p>
-                        
                         <div class="space-y-3 mt-4 text-xs">
                             <div>
                                 <div class="flex justify-between font-bold text-amber-600 mb-1"><span>🇹🇭 หุ้นไทย (เป้า: <span id="lbl-target-th">25</span>%)</span><span id="lbl-actual-th" class="bg-amber-50 px-1.5 rounded">จริง 0%</span></div>
@@ -668,7 +654,6 @@
 
                 <div class="bg-white p-6 rounded-3xl border border-indigo-200 shadow-sm flex flex-col justify-center">
                     <h3 class="text-sm font-bold text-indigo-950 flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">🛡️ ดัชนี "ปันผลเลี้ยงชีพ"</h3>
-                    
                     <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
                         <div class="flex justify-between items-end mb-2">
                             <span class="text-xs font-bold text-indigo-900 leading-tight">ระดับความสำเร็จ<br><span class="text-[9px] font-normal text-slate-500">เทียบปันผลกับรายจ่ายทั่วไป</span></span>
@@ -683,7 +668,7 @@
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2 text-center justify-center">🚀 อัตราการเติบโตของพอร์ตลงทุน (MoM % Growth)</h3>
+                <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2 text-center justify-center">🛡️ อัตราการเติบโตของพอร์ตลงทุน (MoM % Growth)</h3>
                 <div class="relative w-full h-[280px]"><canvas id="dashGrowthChart"></canvas></div>
             </div>
 
@@ -691,7 +676,6 @@
                 <div class="w-full lg:w-1/3 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-slate-100 pb-4 lg:pb-0 lg:pr-6">
                     <h3 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-2">🔮 พยากรณ์ความรวย 5 ปี</h3>
                     <p class="text-[11px] text-slate-500 mb-4">จำลองดอกเบี้ยทบต้น 7% ต่อปี ผสมเงินออมใหม่</p>
-                    
                     <div class="bg-indigo-50 rounded-xl p-4 text-center">
                         <span class="block text-[10px] font-bold text-indigo-800 uppercase tracking-wider">มูลค่าสิ้นปีที่ 5 คาดหวัง</span>
                         <span class="block text-4xl font-black text-indigo-600 mt-1" id="p-wealth-final-huge">0M ฿</span>
@@ -702,10 +686,8 @@
                     <div class="relative w-full h-[180px]"><canvas id="wealthProjectionChart"></canvas></div>
                 </div>
             </div>
-            
         </div>
     </div>
-
 </div>
 
 <script>
@@ -718,27 +700,23 @@
     let stockData = [];
     let creditCardList = ["กสิกร", "TTB"]; 
     let dcaConfigData = []; 
+    let jobCategories = ["เงินเดือน"]; 
+    const tagColors = ['bg-blue-100 text-blue-700 border-blue-200'];
     
-    let jobCategories = ["เงินเดือน", "ค่าคอม", "โบนัส"];
-    const tagColors = ['bg-blue-100 text-blue-700 border-blue-200', 'bg-emerald-100 text-emerald-700 border-emerald-200', 'bg-amber-100 text-amber-700 border-amber-200', 'bg-purple-100 text-purple-700 border-purple-200', 'bg-pink-100 text-pink-700 border-pink-200', 'bg-rose-100 text-rose-700 border-rose-200'];
-    
-    let isEditingIncomeCat = false; let currentSelectedIncomeCat = '';
-
     let stockQuickList = { th: ["LH", "TTB", "TRUE"], us: ["BAC", "JNJ", "AAPL", "GOOG", "AMZN", "MSFT"], fund: ["BGOLD", "BASIA"], bank: ["DIME", "KPLUS", "SCB"] };
     let isEditingStockTags = false;
 
     let personalExpenseChartInstance = null;
     let dashCashflowChart = null, dashAllTimeCashflowChart = null, dashQuarterlyChart = null, dashIncomeTypeChart = null, dashExpensePieChart = null, dashAssetTypeChart = null, dashGrowthChart = null, dashYoYChart = null, dashDividendChart = null, dashYearlyIncomeChart = null;
+    let dashReserveMonthlyChart = null;
     let wealthProjectionChart = null; 
     let miniIncomeChart = null;
     
     let editingIncomeId = null, editingStockId = null;
     let targetAllocation = { th: 25, us: 25, fund: 25, bank: 25 };
-    
     let taxSavedData = {};
 
     function fmtNum(val) { return val.toLocaleString(undefined, {maximumFractionDigits:0}); }
-    
     function fmtCompact(val) {
         if (val >= 1000000) return (val / 1000000).toFixed(2) + 'M';
         if (val >= 1000) return (val / 1000).toFixed(1) + 'K';
@@ -747,6 +725,13 @@
 
     function calculateMonthlyStockInvestments(year, month) {
         return stockData.filter(s => s.year === year && s.month === month && s.type === 'BUY').reduce((sum, s) => sum + (s.currency === 'USD' ? (s.price+s.fee) * USD_TO_THB : (s.price+s.fee) || 0), 0);
+    }
+
+    function updateLiveIncomeResult() {
+        const amt = parseFloat(document.getElementById('inc-amount').value) || 0;
+        const res = parseFloat(document.getElementById('inc-reserve').value) || 0;
+        const net = amt - res;
+        document.getElementById('live-income-real-display').innerText = net.toLocaleString(undefined, {minimumFractionDigits: 2}) + " ฿";
     }
 
     function saveData() { 
@@ -765,7 +750,6 @@
         if(localStorage.getItem('aun_incomeData')) incomeData = JSON.parse(localStorage.getItem('aun_incomeData'));
         if(localStorage.getItem('aun_personalExpenseData')) personalExpenseData = JSON.parse(localStorage.getItem('aun_personalExpenseData'));
         if(localStorage.getItem('aun_stockData')) stockData = JSON.parse(localStorage.getItem('aun_stockData'));
-        if(localStorage.getItem('aun_jobCategories')) jobCategories = JSON.parse(localStorage.getItem('aun_jobCategories'));
         if(localStorage.getItem('aun_targetAllocation')) targetAllocation = JSON.parse(localStorage.getItem('aun_targetAllocation'));
         if(localStorage.getItem('aun_taxSavedData')) taxSavedData = JSON.parse(localStorage.getItem('aun_taxSavedData'));
         if(localStorage.getItem('aun_creditCardList')) creditCardList = JSON.parse(localStorage.getItem('aun_creditCardList'));
@@ -774,7 +758,11 @@
         if(localStorage.getItem('aun_dcaConfigData')) { dcaConfigData = JSON.parse(localStorage.getItem('aun_dcaConfigData')); } else { dcaConfigData = [ {name: 'BAC', amount: 300}, {name: 'AAPL', amount: 420}, {name: 'GOOG', amount: 540}, {name: 'AMZN', amount: 600}, {name: 'MSFT', amount: 690}, {name: 'BGOLD', amount: 500} ]; }
         if(localStorage.getItem('aun_gas_url')) document.getElementById('gas-url-input').value = localStorage.getItem('aun_gas_url');
         
-        stockData.forEach(s => { if(s.fee === undefined) s.fee = 0; });
+        // ตรวจสอบการทำความสะอาดฟิลด์ยุคเก่า
+        incomeData.forEach(d => {
+            if(d.reserve === undefined) d.reserve = 0;
+            if(d.realIncome === undefined) d.realIncome = d.amount - d.reserve;
+        });
     }
 
     function checkAndRunAutoDCA() {
@@ -791,16 +779,16 @@
     function closeBackupModal() { document.getElementById('backup-modal').classList.add('hidden'); }
     function getAllDataAsObject() { return { incomeData, personalExpenseData, stockData, jobCategories, stockQuickList, dcaConfigData, targetAllocation, taxSavedData, creditCardList }; }
     function downloadBackupJSON() { const dataStr = JSON.stringify(getAllDataAsObject()); const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr); let linkElement = document.createElement('a'); linkElement.setAttribute('href', dataUri); linkElement.setAttribute('download', 'aun_backup_' + new Date().toISOString().split('T')[0] + '.json'); linkElement.click(); showNotification("📥 โหลดไฟล์ Backup เรียบร้อย!"); }
-    function uploadBackupJSON(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const parsed = JSON.parse(e.target.result); if(parsed.incomeData) incomeData = parsed.incomeData; if(parsed.personalExpenseData) personalExpenseData = parsed.personalExpenseData; if(parsed.stockData) stockData = parsed.stockData; if(parsed.jobCategories) jobCategories = parsed.jobCategories; if(parsed.targetAllocation) targetAllocation = parsed.targetAllocation; if(parsed.stockQuickList) { stockQuickList = parsed.stockQuickList; if(!stockQuickList.bank) stockQuickList.bank = []; } if(parsed.dcaConfigData) dcaConfigData = parsed.dcaConfigData; if(parsed.taxSavedData) taxSavedData = parsed.taxSavedData; if(parsed.creditCardList) creditCardList = parsed.creditCardList; saveData(); refreshAll(); closeBackupModal(); showNotification("📤 กู้คืนข้อมูลสำเร็จ!"); } catch(err) { showNotification("⚠️ ไฟล์พังหรือผิดฟอร์แมต", "error"); } }; reader.readAsText(file); event.target.value = ''; }
+    function uploadBackupJSON(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const parsed = JSON.parse(e.target.result); if(parsed.incomeData) incomeData = parsed.incomeData; if(parsed.personalExpenseData) personalExpenseData = parsed.personalExpenseData; if(parsed.stockData) stockData = parsed.stockData; if(parsed.targetAllocation) targetAllocation = parsed.targetAllocation; if(parsed.stockQuickList) { stockQuickList = parsed.stockQuickList; if(!stockQuickList.bank) stockQuickList.bank = []; } if(parsed.dcaConfigData) dcaConfigData = parsed.dcaConfigData; if(parsed.taxSavedData) taxSavedData = parsed.taxSavedData; if(parsed.creditCardList) creditCardList = parsed.creditCardList; saveData(); refreshAll(); closeBackupModal(); showNotification("📤 กู้คืนข้อมูลสำเร็จ!"); } catch(err) { showNotification("⚠️ ไฟล์พังหรือผิดฟอร์แมต", "error"); } }; reader.readAsText(file); event.target.value = ''; }
     function saveGasUrl() { const url = document.getElementById('gas-url-input').value.trim(); if(url) { localStorage.setItem('aun_gas_url', url); showNotification("✅ เซฟ URL เรียบร้อย"); } }
     async function pushToGoogleSheets() { const url = localStorage.getItem('aun_gas_url'); if(!url) { showNotification("⚠️ ใส่ Web App URL ก่อนดิ", "error"); return; } const btn = document.getElementById('btn-push-sheet'); btn.innerHTML = `⏳ กำลังดัน...`; btn.disabled = true; try { const payload = { action: 'backup', data: getAllDataAsObject() }; const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }); const result = await res.json(); if(result.status === 'success') showNotification("☁️ แบ็คอัพขึ้น Sheet สำเร็จ!"); else showNotification("⚠️ Error: " + result.message, "error"); } catch(err) { showNotification("⚠️ ติดต่อ Sheet ไม่ได้", "error"); } finally { btn.innerHTML = `☁️ ⬆️ ดันขึ้น`; btn.disabled = false; } }
-    async function pullFromGoogleSheets() { const url = localStorage.getItem('aun_gas_url'); if(!url) { showNotification("⚠️ ใส่ Web App URL ก่อน", "error"); return; } if(!confirm("⚠️ ยืนยันดึงข้อมูลมาทับ? ข้อมูลใหม่ที่ยังไม่ดันขึ้นจะหายนะ")) return; const btn = document.getElementById('btn-pull-sheet'); btn.innerHTML = `⏳ กำลังดึง...`; btn.disabled = true; try { const res = await fetch(url + '?action=restore'); const result = await res.json(); if(result.status === 'success' && result.data) { const parsed = result.data; if(parsed.incomeData) incomeData = parsed.incomeData; if(parsed.personalExpenseData) personalExpenseData = parsed.personalExpenseData; if(parsed.stockData) stockData = parsed.stockData; if(parsed.jobCategories) jobCategories = parsed.jobCategories; if(parsed.targetAllocation) targetAllocation = parsed.targetAllocation; if(parsed.stockQuickList) { stockQuickList = parsed.stockQuickList; if(!stockQuickList.bank) stockQuickList.bank = []; } if(parsed.dcaConfigData) dcaConfigData = parsed.dcaConfigData; if(parsed.taxSavedData) taxSavedData = parsed.taxSavedData; if(parsed.creditCardList) creditCardList = parsed.creditCardList; saveData(); refreshAll(); closeBackupModal(); showNotification("☁️ กู้คืนจาก Sheet สำเร็จ!"); } else showNotification("⚠️ ดึงไม่สำเร็จ", "error"); } catch(err) { showNotification("⚠️ ดึงข้อมูลไม่ได้", "error"); } finally { btn.innerHTML = `☁️ ⬇️ ดึงมาทับ`; btn.disabled = false; } }
+    async function pullFromGoogleSheets() { const url = localStorage.getItem('aun_gas_url'); if(!url) { showNotification("⚠️ ใส่ Web App URL ก่อน", "error"); return; } if(!confirm("⚠️ ยืนยันดึงข้อมูลมาทับ? ข้อมูลใหม่ที่ยังไม่ดันขึ้นจะหายนะ")) return; const btn = document.getElementById('btn-pull-sheet'); btn.innerHTML = `⏳ กำลังดึง...`; btn.disabled = true; try { const res = await fetch(url + '?action=restore'); const result = await res.json(); if(result.status === 'success' && result.data) { const parsed = result.data; if(parsed.incomeData) incomeData = parsed.incomeData; if(parsed.personalExpenseData) personalExpenseData = parsed.personalExpenseData; if(parsed.stockData) stockData = parsed.stockData; if(parsed.targetAllocation) targetAllocation = parsed.targetAllocation; if(parsed.stockQuickList) { stockQuickList = parsed.stockQuickList; if(!stockQuickList.bank) stockQuickList.bank = []; } if(parsed.dcaConfigData) dcaConfigData = parsed.dcaConfigData; if(parsed.taxSavedData) taxSavedData = parsed.taxSavedData; if(parsed.creditCardList) creditCardList = parsed.creditCardList; saveData(); refreshAll(); closeBackupModal(); showNotification("☁️ กู้คืนจาก Sheet สำเร็จ!"); } else showNotification("⚠️ ดึงไม่สำเร็จ", "error"); } catch(err) { showNotification("⚠️ ดึงข้อมูลไม่ได้", "error"); } finally { btn.innerHTML = `☁️ ⬇️ ดึงมาทับ`; btn.disabled = false; } }
 
     window.onload = function() {
         const yearSelect = document.getElementById('global-year'); yearSelect.innerHTML = ''; const currentYear = new Date().getFullYear();
         for(let y=2023; y<=currentYear; y++){ yearSelect.innerHTML += `<option value="${y}">${y+543} (${y})</option>`; }
         const now = new Date(); document.getElementById('global-year').value = now.getFullYear().toString(); document.getElementById('global-month').value = String(now.getMonth() + 1).padStart(2, '0');
-        loadData(); checkAndRunAutoDCA(); renderIncomeCategoryTags(); refreshAll();
+        loadData(); checkAndRunAutoDCA(); refreshAll();
     };
 
     function showNotification(message, type = "success") { const c = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = `p-4 rounded-xl shadow-lg border text-sm font-semibold transition-all duration-300 transform translate-y-2 opacity-0 flex items-center gap-2 bg-white z-[100]`; if(type==="error") t.classList.add('border-rose-100', 'text-rose-700'); else t.classList.add('border-emerald-100', 'text-emerald-700'); t.innerHTML = `<span>${type==="error"?'⚠️':'✅'}</span> <span>${message}</span>`; c.appendChild(t); setTimeout(()=> t.classList.remove('translate-y-2', 'opacity-0'), 10); setTimeout(()=> { t.classList.add('translate-y-2', 'opacity-0'); setTimeout(()=>t.remove(),300); }, 3000); }
@@ -829,12 +817,6 @@
     function deleteDcaItem(name) { showCustomConfirm("⚠️ ยืนยันลบ DCA?", `จะลบ ${name} ออกจากระบบออโต้ใช่ป่าว?`, () => { dcaConfigData = dcaConfigData.filter(d => d.name !== name); saveData(); renderDcaConfig(); showNotification("🗑️ ลบ DCA ออกแล้ว"); }); }
     function renderDcaConfig() { const tb = document.getElementById('dca-table-body'); tb.innerHTML = ''; if(dcaConfigData.length === 0) { tb.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400 font-bold text-xs">ยังไม่มีรายการ DCA เพิ่มด้านบนเลย</td></tr>`; return; } dcaConfigData.forEach((d, idx) => { tb.innerHTML += `<tr><td class="p-2 font-bold text-indigo-950">${d.name}</td><td class="p-2 text-right"><input type="number" value="${d.amount}" onchange="updateDcaAmount('${d.name}', this.value)" class="w-24 text-right bg-white border border-slate-200 outline-none focus:border-indigo-500 rounded px-2 py-1 font-bold text-emerald-600"></td><td class="p-2 text-center"><button onclick="deleteDcaItem('${d.name}')" class="text-rose-500 hover:bg-rose-100 p-1.5 rounded-lg transition">🗑️</button></td></tr>`; }); }
     
-    function renderIncomeCategoryTags() { const c = document.getElementById('inc-cat-tags'); if(!c) return; c.innerHTML = ''; if(!currentSelectedIncomeCat && jobCategories.length > 0) { currentSelectedIncomeCat = jobCategories[0]; document.getElementById('inc-category-select').value = currentSelectedIncomeCat; } jobCategories.forEach((cat, idx) => { let colorClass = tagColors[idx % tagColors.length]; let isSel = (cat === currentSelectedIncomeCat) && !isEditingIncomeCat; let baseStyle = `px-3 py-1.5 rounded-xl text-xs font-bold border cursor-pointer transition-all ${colorClass}`; if(isSel) baseStyle += ` ring-2 ring-offset-1 opacity-100`; else baseStyle += ` opacity-60 hover:opacity-100`; if(isEditingIncomeCat) { c.innerHTML += `<div class="${baseStyle} flex items-center gap-1 group"><span class="line-through group-hover:no-underline">${cat}</span><button type="button" onclick="deleteIncomeCategory(${idx})" class="bg-white/50 rounded-full w-4 h-4 flex items-center justify-center text-[8px] hover:bg-rose-500 hover:text-white">✕</button></div>`; } else { c.innerHTML += `<div onclick="selectIncomeCategory('${cat}')" class="${baseStyle}">${cat}</div>`; } }); document.getElementById('btn-edit-inc-cat').innerText = isEditingIncomeCat ? '✅ เสร็จสิ้น' : '✏️ แก้ไข/ลบ'; document.getElementById('inc-category-select').value = currentSelectedIncomeCat; }
-    function selectIncomeCategory(cat) { currentSelectedIncomeCat = cat; renderIncomeCategoryTags(); }
-    function toggleEditIncomeCat() { isEditingIncomeCat = !isEditingIncomeCat; renderIncomeCategoryTags(); }
-    function addIncomeCategory() { const val = document.getElementById('new-inc-cat-input').value.trim(); if(!val) return; if(jobCategories.includes(val)){ showNotification("ซ้ำ!", "error"); return; } jobCategories.push(val); document.getElementById('new-inc-cat-input').value = ''; saveData(); currentSelectedIncomeCat = val; isEditingIncomeCat = false; renderIncomeCategoryTags(); showNotification("เพิ่มประเภทใหม่ละ!"); refreshAll(); }
-    function deleteIncomeCategory(idx) { jobCategories.splice(idx, 1); saveData(); if(currentSelectedIncomeCat === jobCategories[idx] || !jobCategories.includes(currentSelectedIncomeCat)) { currentSelectedIncomeCat = jobCategories[0] || ''; } renderIncomeCategoryTags(); refreshAll(); }
-    
     function toggleEditStockTags() { isEditingStockTags = !isEditingStockTags; document.getElementById('btn-edit-stock-tags').innerText = isEditingStockTags ? '✅ เสร็จสิ้น' : '✏️ แก้ไข/ลบ'; document.getElementById('edit-stock-tag-controls').classList.toggle('hidden'); renderStockQuickSelect(); }
     function addStockTag() { const cat = document.getElementById('new-stock-tag-cat').value; const val = document.getElementById('new-stock-tag-input').value.trim().toUpperCase(); if(!val) return; if(stockQuickList[cat].includes(val)) { showNotification("ซ้ำ!", "error"); return; } stockQuickList[cat].push(val); document.getElementById('new-stock-tag-input').value = ''; saveData(); renderStockQuickSelect(); showNotification("เพิ่มหุ้นสำเร็จ!"); }
     function deleteStockTag(cat, idx) { stockQuickList[cat].splice(idx, 1); saveData(); renderStockQuickSelect(); }
@@ -842,7 +824,29 @@
     
     function setStockCurrency(curr) { document.getElementById('stock-currency').value = curr; if(curr==='USD'){ document.getElementById('stock-curr-usd').className="flex-1 py-2 text-xs font-extrabold rounded-lg bg-white text-indigo-950 shadow-sm border border-slate-200"; document.getElementById('stock-curr-thb').className="flex-1 py-2 text-xs font-extrabold rounded-lg text-slate-500"; }else{ document.getElementById('stock-curr-thb').className="flex-1 py-2 text-xs font-extrabold rounded-lg bg-white text-indigo-950 shadow-sm border border-slate-200"; document.getElementById('stock-curr-usd').className="flex-1 py-2 text-xs font-extrabold rounded-lg text-slate-500"; } }
 
-    function addIncome(e) { e.preventDefault(); incomeData.push({ id: Date.now().toString(), year: document.getElementById('global-year').value, month: document.getElementById('global-month').value, type: document.getElementById('inc-category-select').value, detail: document.getElementById('inc-detail').value.trim() || '-', amount: parseFloat(document.getElementById('inc-amount').value)||0, expense: 0 }); document.getElementById('income-form').reset(); saveData(); showNotification("บันทึกรายรับสำเร็จ!"); refreshAll(); }
+    function addIncome(e) { 
+        e.preventDefault(); 
+        const amtValue = parseFloat(document.getElementById('inc-amount').value) || 0;
+        const resValue = parseFloat(document.getElementById('inc-reserve').value) || 0;
+        const realNet = amtValue - resValue;
+
+        incomeData.push({ 
+            id: Date.now().toString(), 
+            year: document.getElementById('global-year').value, 
+            month: document.getElementById('global-month').value, 
+            type: "เงินเดือน", 
+            detail: document.getElementById('inc-detail').value.trim() || '-', 
+            amount: amtValue, 
+            reserve: resValue,
+            realIncome: realNet,
+            expense: 0 
+        }); 
+        document.getElementById('income-form').reset(); 
+        document.getElementById('live-income-real-display').innerText = "0.00 ฿";
+        saveData(); 
+        showNotification("บันทึกรายรับสำเร็จ!"); 
+        refreshAll(); 
+    }
     
     function renderIncome12Months(y) {
         let tb = document.getElementById('income-12m-table-body');
@@ -850,28 +854,24 @@
         tb.innerHTML = '';
         
         const monthsThai = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-        let tSalary=0, tCom=0, tBonus=0, tOther=0, tTotal=0;
+        let tAmount=0, tReserve=0, tReal=0;
 
         for(let m=1; m<=12; m++) {
             let mStr = String(m).padStart(2,'0');
             let mData = incomeData.filter(d => d.year === y && d.month === mStr);
             
-            let mSalary = mData.filter(d => d.type === 'เงินเดือน').reduce((s,i)=>s+i.amount,0);
-            let mCom = mData.filter(d => d.type === 'ค่าคอม').reduce((s,i)=>s+i.amount,0);
-            let mBonus = mData.filter(d => d.type === 'โบนัส').reduce((s,i)=>s+i.amount,0);
-            let mOther = mData.filter(d => !['เงินเดือน','ค่าคอม','โบนัส'].includes(d.type)).reduce((s,i)=>s+i.amount,0);
-            let mSum = mSalary + mCom + mBonus + mOther;
+            let mAmount = mData.reduce((s,i)=>s+(i.amount || 0),0);
+            let mReserve = mData.reduce((s,i)=>s+(i.reserve || 0),0);
+            let mReal = mData.reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
 
-            tSalary+=mSalary; tCom+=mCom; tBonus+=mBonus; tOther+=mOther; tTotal+=mSum;
+            tAmount+=mAmount; tReserve+=mReserve; tReal+=mReal;
 
             tb.innerHTML += `
                 <tr class="hover:bg-indigo-50/50 transition">
                     <td class="p-3 font-bold text-slate-700">${monthsThai[m-1]}</td>
-                    <td class="p-3 text-right ${mSalary>0?'text-slate-800 font-semibold':'text-slate-300'}">${mSalary>0?mSalary.toLocaleString():'-'}</td>
-                    <td class="p-3 text-right ${mCom>0?'text-blue-600 font-semibold':'text-slate-300'}">${mCom>0?mCom.toLocaleString():'-'}</td>
-                    <td class="p-3 text-right ${mBonus>0?'text-amber-600 font-semibold':'text-slate-300'}">${mBonus>0?mBonus.toLocaleString():'-'}</td>
-                    <td class="p-3 text-right ${mOther>0?'text-purple-600 font-semibold':'text-slate-300'}">${mOther>0?mOther.toLocaleString():'-'}</td>
-                    <td class="p-3 text-right font-black text-emerald-600 bg-emerald-50/30">${mSum>0?mSum.toLocaleString():'-'}</td>
+                    <td class="p-3 text-right ${mAmount>0?'text-slate-800 font-semibold':'text-slate-300'}">${mAmount>0?mAmount.toLocaleString():'-'}</td>
+                    <td class="p-3 text-right ${mReserve>0?'text-rose-600 font-semibold':'text-slate-300'}">${mReserve>0?mReserve.toLocaleString():'-'}</td>
+                    <td class="p-3 text-right font-black text-emerald-600 bg-emerald-50/30">${mReal>0?mReal.toLocaleString():'-'}</td>
                 </tr>
             `;
         }
@@ -879,11 +879,9 @@
         tf.innerHTML = `
             <tr class="bg-slate-800 text-white font-bold">
                 <td class="p-3 text-right rounded-bl-lg">รวมทั้งปี</td>
-                <td class="p-3 text-right">${tSalary.toLocaleString()}</td>
-                <td class="p-3 text-right">${tCom.toLocaleString()}</td>
-                <td class="p-3 text-right text-amber-300">${tBonus.toLocaleString()}</td>
-                <td class="p-3 text-right">${tOther.toLocaleString()}</td>
-                <td class="p-3 text-right text-emerald-400 font-black rounded-br-lg">${tTotal.toLocaleString()}</td>
+                <td class="p-3 text-right">${tAmount.toLocaleString()}</td>
+                <td class="p-3 text-right text-rose-300">${tReserve.toLocaleString()}</td>
+                <td class="p-3 text-right text-emerald-400 font-black rounded-br-lg">${tReal.toLocaleString()}</td>
             </tr>
         `;
     }
@@ -892,19 +890,46 @@
         let tb=document.getElementById('income-detail-table-body'); 
         tb.innerHTML=''; 
         if(!manual.length) { 
-            tb.innerHTML=`<tr><td colspan="4" class="p-4 text-center text-slate-400">ยังไม่มีรายการของเดือนนี้</td></tr>`; 
+            tb.innerHTML=`<tr><td colspan="5" class="p-4 text-center text-slate-400">ยังไม่มีรายการของเดือนนี้</td></tr>`; 
             return; 
         } 
         manual.forEach(i=> { 
+            let rAmt = i.amount || 0;
+            let rRes = i.reserve || 0;
+            let rNet = i.realIncome !== undefined ? i.realIncome : (rAmt - rRes);
+
             if(editingIncomeId===i.id) { 
-                tb.innerHTML+=`<tr class="bg-indigo-50"><td class="p-2"><input id="ei-type-${i.id}" value="${i.type}" class="border px-2 py-1 w-24 text-xs rounded"></td><td class="p-2"><input id="ei-det-${i.id}" value="${i.detail}" class="border px-2 py-1 w-full text-xs rounded"></td><td class="p-2"><input type="number" id="ei-amt-${i.id}" value="${i.amount}" class="border px-2 py-1 w-24 text-xs text-right rounded"></td><td class="p-2 text-center"><button onclick="saveEditIncome('${i.id}')" class="text-emerald-500 mr-2 bg-emerald-100 px-2 py-1 rounded">บันทึก</button><button onclick="editingIncomeId=null; refreshAll()" class="text-slate-400">ยกเลิก</button></td></tr>`; 
+                tb.innerHTML+=`<tr class="bg-indigo-50">
+                    <td class="p-2"><input id="ei-det-${i.id}" value="${i.detail}" class="border px-2 py-1 w-full text-xs rounded"></td>
+                    <td class="p-2"><input type="number" id="ei-amt-${i.id}" value="${rAmt}" class="border px-2 py-1 w-24 text-xs text-right rounded"></td>
+                    <td class="p-2"><input type="number" id="ei-res-${i.id}" value="${rRes}" class="border px-2 py-1 w-24 text-xs text-right rounded"></td>
+                    <td class="p-2 text-right text-indigo-600 font-bold">คำนวณใหม่อัตโนมัติ</td>
+                    <td class="p-2 text-center"><button onclick="saveEditIncome('${i.id}')" class="text-emerald-500 mr-2 bg-emerald-100 px-2 py-1 rounded text-xs">บันทึก</button><button onclick="editingIncomeId=null; refreshAll()" class="text-slate-400 text-xs">ยกเลิก</button></td>
+                </tr>`; 
             } else { 
-                tb.innerHTML+=`<tr><td class="p-3"><span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-[10px] rounded font-bold">${i.type}</span></td><td class="p-3 text-xs">${i.detail}</td><td class="p-3 text-right text-emerald-600 font-bold">${i.amount.toLocaleString()}</td><td class="p-3 text-center"><button onclick="editingIncomeId='${i.id}'; refreshAll()" class="text-indigo-500 hover:bg-indigo-100 p-1 rounded mr-2">✏️</button><button onclick="deleteData('${i.id}','inc')" class="text-rose-500 hover:bg-rose-100 p-1 rounded">🗑️</button></td></tr>`; 
+                tb.innerHTML+=`<tr>
+                    <td class="p-3 text-xs">${i.detail}</td>
+                    <td class="p-3 text-right text-slate-800 font-medium">${rAmt.toLocaleString()}</td>
+                    <td class="p-3 text-right text-rose-600 font-medium">${rRes.toLocaleString()}</td>
+                    <td class="p-3 text-right text-emerald-600 font-bold">${rNet.toLocaleString()}</td>
+                    <td class="p-3 text-center"><button onclick="editingIncomeId='${i.id}'; refreshAll()" class="text-indigo-500 hover:bg-indigo-100 p-1 rounded mr-2">✏️</button><button onclick="deleteData('${i.id}','inc')" class="text-rose-500 hover:bg-rose-100 p-1 rounded">🗑️</button></td>
+                </tr>`; 
             } 
         }); 
     }
     
-    function saveEditIncome(id) { let r=incomeData.find(x=>x.id===id); if(r){ r.type=document.getElementById(`ei-type-${id}`).value; r.detail=document.getElementById(`ei-det-${id}`).value; r.amount=parseFloat(document.getElementById(`ei-amt-${id}`).value)||0; } editingIncomeId=null; saveData(); refreshAll(); }
+    function saveEditIncome(id) { 
+        let r=incomeData.find(x=>x.id===id); 
+        if(r){ 
+            r.detail=document.getElementById(`ei-det-${id}`).value; 
+            r.amount=parseFloat(document.getElementById(`ei-amt-${id}`).value)||0; 
+            r.reserve=parseFloat(document.getElementById(`ei-res-${id}`).value)||0; 
+            r.realIncome = r.amount - r.reserve;
+        } 
+        editingIncomeId=null; 
+        saveData(); 
+        refreshAll(); 
+    }
 
     function renderMiniIncomeChart(y) {
         if(miniIncomeChart) miniIncomeChart.destroy(); 
@@ -912,19 +937,18 @@
         let mArr = Array(12).fill(0);
         for(let m=1; m<=12; m++) {
             let mStr = String(m).padStart(2,'0');
-            mArr[m-1] = incomeData.filter(d => d.year === y && d.month === mStr).reduce((s,i)=>s+i.amount,0);
+            mArr[m-1] = incomeData.filter(d => d.year === y && d.month === mStr).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
         }
 
         const labels = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-        
         miniIncomeChart = new Chart(document.getElementById('miniIncomeChart'), { 
             type: 'bar', 
             data: { 
                 labels: labels, 
                 datasets: [{
-                    label: 'รายรับสุทธิ (บาท)', 
+                    label: 'รายรับจริงของเดือนนี้ (บาท)', 
                     data: mArr, 
-                    backgroundColor: '#6366f1',
+                    backgroundColor: '#10b981',
                     borderRadius: 4
                 }] 
             }, 
@@ -932,7 +956,7 @@
                 responsive: true, maintainAspectRatio: false, 
                 plugins: { 
                     legend: { display: false },
-                    datalabels: { display: true, align: 'top', anchor: 'end', color: '#4f46e5', font: {family: 'Sarabun', weight: 'bold', size: 9}, formatter: (val) => val > 0 ? fmtCompact(val) : '' }
+                    datalabels: { display: true, align: 'top', anchor: 'end', color: '#059669', font: {family: 'Sarabun', weight: 'bold', size: 9}, formatter: (val) => val > 0 ? fmtCompact(val) : '' }
                 },
                 scales: { y: { beginAtZero: true, display: false } }
             } 
@@ -944,7 +968,6 @@
         c.innerHTML = '';
         let html = '';
         let total = 0;
-        
         let cardDetails = px.cardDetails || {};
 
         creditCardList.forEach((cardName, idx) => {
@@ -965,21 +988,19 @@
     }
 
     function addCreditCardField() {
-        let name = prompt("ชื่อบัตรเครดิตที่ต้องการเพิ่ม (เช่น กสิกร, KTC, กรุงศรี):");
+        let name = prompt("ชื่อบัตรเครดิตที่ต้องการเพิ่ม:");
         if(name) {
             name = name.trim();
             if(!creditCardList.includes(name)) {
                 creditCardList.push(name);
                 saveData();
                 refreshAll();
-            } else {
-                showNotification("มีชื่อบัตรนี้อยู่แล้ว", "error");
-            }
+            } else { showNotification("มีชื่อบัตรนี้อยู่แล้ว", "error"); }
         }
     }
 
     function deleteCreditCardField(name) {
-        showCustomConfirm("ยืนยัน", `ลบบัตร ${name} ออกจากรายการกรอก? (ข้อมูลย้อนหลังไม่หาย)`, () => {
+        showCustomConfirm("ยืนยัน", `ลบบัตร ${name} ออกจากรายการกรอก?`, () => {
             creditCardList = creditCardList.filter(n => n !== name);
             saveData();
             refreshAll();
@@ -1034,7 +1055,6 @@
         document.getElementById('exp-stocks').value = calculateMonthlyStockInvestments(y, m); 
         document.getElementById('exp-game-aun').value = r.gameAun !== undefined ? r.gameAun : 20000; 
         document.getElementById('exp-other-ext').value = r.otherExt || 0; 
-
         renderCreditCardFields(r);
     }
 
@@ -1049,9 +1069,7 @@
             let totalAll = cEat + cCrd + cRnt + cPer + cStk + cGm + cOth; let totalExpensesOnly = cEat + cCrd + cRnt + cPer + cGm + cOth; 
             if (totalAll > 0) { 
                 multiLineLabels.push([ baseMonthsThai[m-1], `รวม: ${totalAll.toLocaleString(undefined, {maximumFractionDigits:0})}`, `จ่าย: ${totalExpensesOnly.toLocaleString(undefined, {maximumFractionDigits:0})}`, `หุ้น: ${cStk.toLocaleString(undefined, {maximumFractionDigits:0})}` ]); 
-            } else { 
-                multiLineLabels.push(baseMonthsThai[m-1]); 
-            } 
+            } else { multiLineLabels.push(baseMonthsThai[m-1]); } 
         } 
         personalExpenseChartInstance = new Chart(document.getElementById('personalExpenseChart'), { 
             type: 'bar', 
@@ -1108,14 +1126,12 @@
     }
     function saveEditStock(id) { let r=stockData.find(x=>x.id===id); if(r){ r.month=document.getElementById(`es-m-${id}`).value; r.year=document.getElementById(`es-y-${id}`).value; r.price=parseFloat(document.getElementById(`es-p-${id}`).value)||0; r.fee=parseFloat(document.getElementById(`es-f-${id}`).value)||0; } editingStockId=null; saveData(); refreshAll(); }
 
-    // ฟังก์ชันจัดการรายการย่อยภาษี
     function addDynamicTaxItem(catIndex) {
-        const name = prompt("ชื่อรายการลดหย่อนใหม่ (เช่น ช้อปดีมีคืน, บริจาคน้ำท่วม):");
+        const name = prompt("ชื่อรายการลดหย่อนใหม่:");
         if(!name) return;
         const y = document.getElementById('global-year').value;
         if(!taxSavedData[y]) taxSavedData[y] = {};
         if(!taxSavedData[y].customItems) taxSavedData[y].customItems = { "1":[], "2":[], "3":[], "4":[] };
-        
         taxSavedData[y].customItems[catIndex].push({ id: Date.now().toString(), name: name, amount: 0 });
         saveData();
         renderDynamicTaxItems(y);
@@ -1164,36 +1180,29 @@
 
     function calculateTax2569() {
         const y = document.getElementById('global-year').value;
-        
-        let grossIncomeY = incomeData.filter(d=>d.year===y).reduce((s,i)=>s+i.amount,0);
+        let grossIncomeY = incomeData.filter(d=>d.year===y).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
         let expenseDeduct = Math.min(grossIncomeY * 0.50, 100000);
 
         let dPersonal = parseFloat(document.getElementById('tax-deduct-personal').value) || 60000;
         let dSpouse = parseFloat(document.getElementById('tax-deduct-spouse').value) || 0;
         let dChild = parseFloat(document.getElementById('tax-deduct-child').value) || 0;
         let dParents = parseFloat(document.getElementById('tax-deduct-parents').value) || 0;
-        
         let dSso = Math.min(parseFloat(document.getElementById('tax-deduct-sso').value) || 0, 9000); 
-        
         let dLifeInsRaw = parseFloat(document.getElementById('tax-deduct-life-ins').value) || 0;
         let dHealthInsRaw = parseFloat(document.getElementById('tax-deduct-health-ins').value) || 0;
         let dHealthInsCap = Math.min(dHealthInsRaw, 25000); 
         let dLifeHealthCombo = Math.min(dLifeInsRaw + dHealthInsCap, 100000); 
-        
         let dParentsHealth = Math.min(parseFloat(document.getElementById('tax-deduct-parents-health').value) || 0, 15000); 
-        
         let dProvident = parseFloat(document.getElementById('tax-deduct-provident').value) || 0;
         let dFunds = parseFloat(document.getElementById('tax-deduct-funds').value) || 0;
         let dPension = parseFloat(document.getElementById('tax-deduct-pension').value) || 0;
         let dRetireCombo = Math.min(dProvident + dFunds + dPension, 500000); 
-        
         let dHomeLoan = Math.min(parseFloat(document.getElementById('tax-deduct-home-loan').value) || 0, 100000); 
         let dGov = parseFloat(document.getElementById('tax-deduct-gov').value) || 0;
         let dDonate = parseFloat(document.getElementById('tax-deduct-donate').value) || 0;
 
         let totalDeduct = dPersonal + dSpouse + dChild + dParents + dSso + dLifeHealthCombo + dParentsHealth + dRetireCombo + dHomeLoan + dGov + dDonate;
 
-        // ดึงยอดจากรายการไดนามิกมาบวก
         let dynamicTotal = 0;
         if(taxSavedData[y] && taxSavedData[y].customItems) {
             for(let cat = 1; cat <= 4; cat++) {
@@ -1205,7 +1214,6 @@
         totalDeduct += dynamicTotal;
 
         if(!taxSavedData[y]) taxSavedData[y] = {};
-        
         Object.assign(taxSavedData[y], {
             spouse: dSpouse, child: dChild, parents: dParents, sso: document.getElementById('tax-deduct-sso').value,
             lifeIns: dLifeInsRaw, healthIns: dHealthInsRaw, parentsHealth: document.getElementById('tax-deduct-parents-health').value,
@@ -1216,7 +1224,6 @@
         saveData();
 
         let netTaxable = Math.max(grossIncomeY - expenseDeduct - totalDeduct, 0);
-
         let computedTax = 0;
         let tempNet = netTaxable;
         let stepHtml = '';
@@ -1238,20 +1245,9 @@
                 let taxInBracket = amountInBracket * b.rate;
                 computedTax += taxInBracket;
                 tempNet -= amountInBracket;
-                
-                stepHtml += `
-                    <div class="flex justify-between ${taxInBracket > 0 ? 'text-indigo-800 font-bold' : ''}">
-                        <span>${b.label} : </span>
-                        <span>${fmtNum(amountInBracket)} x ${(b.rate*100).toFixed(0)}% = ${fmtNum(taxInBracket)}</span>
-                    </div>
-                `;
+                stepHtml += `<div class="flex justify-between ${taxInBracket > 0 ? 'text-indigo-800 font-bold' : ''}"><span>${b.label} : </span><span>${fmtNum(amountInBracket)} x ${(b.rate*100).toFixed(0)}% = ${fmtNum(taxInBracket)}</span></div>`;
             } else {
-                stepHtml += `
-                    <div class="flex justify-between text-slate-300">
-                        <span>${b.label} : </span>
-                        <span>0</span>
-                    </div>
-                `;
+                stepHtml += `<div class="flex justify-between text-slate-300"><span>${b.label} : </span><span>0</span></div>`;
             }
         }
 
@@ -1265,7 +1261,6 @@
 
         let taxPrepaid = taxSavedData[y].prepaid || 0;
         let taxDiff = taxPrepaid - computedTax;
-        
         let finalStatusEl = document.getElementById('tax-final-status-text');
         let finalAmtEl = document.getElementById('tax-final-amount');
         
@@ -1296,7 +1291,6 @@
         document.getElementById('tax-deduct-gov').value = sd.gov || 0;
         document.getElementById('tax-deduct-donate').value = sd.donate || 0;
         document.getElementById('tax-prepaid-input').value = sd.prepaid || 0;
-        
         renderDynamicTaxItems(y);
         calculateTax2569();
     }
@@ -1308,13 +1302,13 @@
         safeSetText('inc-table-year-lbl', `ปี ${parseInt(y)+543}`);
 
         let mInc = incomeData.filter(d=> d.year===y && d.month===m); 
-        let yIncTotal = incomeData.filter(d=>d.year===y).reduce((s,i)=>s+i.amount,0);
+        let yIncTotal = incomeData.filter(d=>d.year===y).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
         
         renderIncome12Months(y);
         renderIncomeDetailList(mInc);
         renderMiniIncomeChart(y);
         
-        let tInc = mInc.reduce((s,i)=>s+i.amount,0); 
+        let tInc = mInc.reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0); 
         safeSetText('t1-month-income', tInc.toLocaleString(undefined, {minimumFractionDigits: 2})+' บาท'); 
         
         let currentMonthInt = parseInt(m) || 1;
@@ -1349,34 +1343,20 @@
         safeSetText('t5-month-stock-turnover', stks.reduce((s,i)=>s+(i.currency==='USD'?(i.price+i.fee)*USD_TO_THB:(i.price+i.fee)),0).toLocaleString(undefined, {minimumFractionDigits: 2})+' บาท'); 
         renderStockQuickSelect(); 
         renderStocksTable(stockData);
-        
         loadTaxForm(y);
-        
         renderDashboard(y);
     }
 
     function getPast3MonthAvgGenExp(y, m) {
-        let year = parseInt(y);
-        let month = parseInt(m);
-        let total = 0;
-        let count = 0;
-        
+        let year = parseInt(y); let month = parseInt(m); let total = 0; let count = 0;
         for (let i = 1; i <= 3; i++) {
-            let prevMonth = month - i;
-            let prevYear = year;
-            if (prevMonth <= 0) {
-                prevMonth += 12;
-                prevYear -= 1;
-            }
-            let pmStr = String(prevMonth).padStart(2, '0');
-            let pyStr = String(prevYear);
-            
+            let prevMonth = month - i; let prevYear = year;
+            if (prevMonth <= 0) { prevMonth += 12; prevYear -= 1; }
+            let pmStr = String(prevMonth).padStart(2, '0'); let pyStr = String(prevYear);
             let px = personalExpenseData.find(d => d.year === pyStr && d.month === pmStr);
-            
             if (px) {
                 let genE = (px.eating || 0) + (px.creditCard || 0) + (px.rent || 0) + (px.personal || 0) + (px.otherExt || 0);
-                total += genE;
-                count++;
+                total += genE; count++;
             }
         }
         return count > 0 ? total / count : 0;
@@ -1385,10 +1365,8 @@
     function changeTargetWeight(category, val) {
         targetAllocation[category] = parseFloat(val) || 0;
         let total = targetAllocation.th + targetAllocation.us + targetAllocation.fund + targetAllocation.bank;
-        
         safeSetText(`lbl-target-${category}`, val);
         const totalLbl = document.getElementById('p-target-weight-total');
-        
         if (total === 100) {
             totalLbl.innerText = "เป้าหมายรวม: 100% (สมดุลพอดีเว้ย!)";
             totalLbl.className = "text-[11px] font-black text-emerald-600";
@@ -1440,14 +1418,19 @@
         
         let incArr = Array(12).fill(0);
         let expTotalArr = Array(12).fill(0), genExpArr = Array(12).fill(0), invExpArr = Array(12).fill(0); 
-        
+        let reserveArr = Array(12).fill(0); // ลิสต์สำหรับเก็บค่าหักสำรองรายเดือน
+
         let totalIncY=0, totalExpY=0, totalGenExpY=0, totalInvY=0, totalDividendY=0;
         let currentMonthInt = parseInt(m) || 1;
         
         for(let mIdx=1; mIdx<=12; mIdx++) {
             let mStr = String(mIdx).padStart(2,'0');
+            let mData = incomeData.filter(d=>d.year===y && d.month===mStr);
             
-            let miTotal = incomeData.filter(d=>d.year===y && d.month===mStr).reduce((s,i)=>s+i.amount,0);
+            let miTotal = mData.reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
+            let miReserve = mData.reduce((s,i)=>s+(i.reserve || 0),0);
+            reserveArr[mIdx-1] = miReserve;
+
             let px = personalExpenseData.find(d=> d.year===y && d.month===mStr) || {}; 
             let calcStocks = calculateMonthlyStockInvestments(y, mStr);
             
@@ -1476,6 +1459,33 @@
         safeSetText('dash-avg-gen-exp', fmtNum(totalGenExpY/currentMonthInt) + ' ฿');
         safeSetText('dash-avg-inv', fmtNum(totalInvY/currentMonthInt) + ' ฿');
 
+        // ข้อที่ 4: คำนวณสะสมทั้งหมด (All-Time) ของรายการหักสำรอง
+        let totalReserveAllTime = incomeData.reduce((sum, i) => sum + (i.reserve || 0), 0);
+        safeSetText('dash-total-reserve-alltime', totalReserveAllTime.toLocaleString() + ' ฿');
+
+        // เรนเดอร์กราฟรายการหักสำรองของบริษัท
+        if(dashReserveMonthlyChart) dashReserveMonthlyChart.destroy();
+        dashReserveMonthlyChart = new Chart(document.getElementById('dashReserveMonthlyChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'ยอดหักสำรอง (บาท)',
+                    data: reserveArr,
+                    backgroundColor: '#f43f5e',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: { display: true, align: 'top', anchor: 'end', color: '#e11d48', font: {family: 'Sarabun', weight: 'bold', size: 9}, formatter: (val) => val > 0 ? fmtCompact(val) : '' }
+                },
+                scales: { y: { beginAtZero: true, display: false } }
+            }
+        });
+
         let currentMonthGenExp = genExpArr[currentMonthInt - 1] || 0;
         let past3Avg = getPast3MonthAvgGenExp(y, m);
         let warningBox = document.getElementById('p-mom-warning-box');
@@ -1483,9 +1493,7 @@
         let warningTitleText = document.getElementById('p-mom-warning-title-text');
         
         if (past3Avg > 0) {
-            let diff = currentMonthGenExp - past3Avg;
-            let pctIncrease = (diff / past3Avg * 100).toFixed(0);
-            
+            let diff = currentMonthGenExp - past3Avg; let pctIncrease = (diff / past3Avg * 100).toFixed(0);
             if (diff > past3Avg * 0.10) { 
                 safeSetText('p-mom-warning-title', `🚨 จ่ายหนักขึ้น +${pctIncrease}%!`);
                 safeSetText('p-mom-warning-desc', `เดือนนี้ใช้ ${fmtNum(currentMonthGenExp)} บ. (เฉลี่ยเดิม ${fmtNum(past3Avg)} บ.)`);
@@ -1507,36 +1515,30 @@
                 warningTitleText.className = "text-[11px] font-bold text-amber-800";
             }
         } else {
-            safeSetText('p-mom-warning-title', "🟢 ยังไม่มีข้อมูลประเมิน");
-            safeSetText('p-mom-warning-desc', `รอเก็บข้อมูลย้อนหลัง 3 เดือนก่อนนะ`);
+            safeSetText('p-mom-warning-title', "🟢 ยังไม่มีข้อมูลประเมิน"); safeSetText('p-mom-warning-desc', `รอเก็บข้อมูลย้อนหลัง 3 เดือนก่อนนะ`);
             warningBox.className = "p-3 rounded-xl border relative mb-3 transition-colors bg-slate-50 border-slate-200 text-slate-700";
             warningPulse.className = "w-2.5 h-2.5 rounded-full inline-block bg-emerald-500";
         }
 
         let pxCurrent = personalExpenseData.find(d => d.year === y && d.month === m) || {};
         let currentCardAmt = pxCurrent.creditCard || 0;
-        let currentMonthCollectedCash = incomeData.filter(d => d.year === y && d.month === m).reduce((s, i) => s + i.amount, 0);
+        let currentMonthCollectedCash = incomeData.filter(d => d.year === y && d.month === m).reduce((s, i) => s + (i.realIncome || (i.amount - i.reserve)), 0);
         let creditRatio = currentMonthCollectedCash > 0 ? (currentCardAmt / currentMonthCollectedCash) * 100 : 0;
         safeSetText('p-credit-ratio-label', creditRatio.toFixed(1) + "%");
         
         let cardWarnEl = document.getElementById('p-credit-card-warning');
-        if (creditRatio > 100) {
-            cardWarnEl.innerText = "🛑 อันตราย! บัตรท่วม";
-            cardWarnEl.className = "font-black text-rose-600 animate-bounce";
-        } else if (creditRatio > 50) {
-            cardWarnEl.innerText = "⚠️ ระวัง! เกินครึ่งละ";
-            cardWarnEl.className = "font-bold text-amber-600";
-        } else {
-            cardWarnEl.innerText = currentCardAmt > 0 ? `🟢 ${fmtNum(currentCardAmt)} ฿` : "🟢 ไม่มีหนี้บัตร";
-            cardWarnEl.className = "font-bold text-emerald-600";
-        }
+        if (creditRatio > 100) { cardWarnEl.innerText = "🛑 อันตราย! บัตรท่วม"; cardWarnEl.className = "font-black text-rose-600 animate-bounce"; } 
+        else if (creditRatio > 50) { cardWarnEl.innerText = "⚠️ ระวัง! เกินครึ่งละ"; cardWarnEl.className = "font-bold text-amber-600"; } 
+        else { cardWarnEl.innerText = currentCardAmt > 0 ? `🟢 ${fmtNum(currentCardAmt)} ฿` : "🟢 ไม่มีหนี้บัตร"; cardWarnEl.className = "font-bold text-emerald-600"; }
 
+        // ข้อที่ 2.1: คำนวณมูลค่าพอร์ตลงทุนสะสม All-Time ตั้งแต่ต้นประวัติศาสตร์
         let portfolioValue = 0;
         stockData.forEach(s => {
             let v = s.currency === 'USD' ? s.price * USD_TO_THB : s.price;
             if(s.type === 'BUY') portfolioValue += v;
             else if(s.type === 'SELL') portfolioValue -= v;
         });
+        safeSetText('dash-total-assets-alltime', portfolioValue.toLocaleString(undefined, {maximumFractionDigits: 2}) + " ฿");
 
         let monthlyInvestmentAmt = totalInvY / currentMonthInt; 
         let avgMonthlyGenExp = totalGenExpY / currentMonthInt;
@@ -1544,32 +1546,17 @@
         if(survivalBurnRate <= 0) survivalBurnRate = 15000; 
 
         let survivalMonths = portfolioValue / survivalBurnRate;
-        let survivalYears = Math.floor(survivalMonths / 12);
-        let survivalRemM = Math.round(survivalMonths % 12);
+        let survivalYears = Math.floor(survivalMonths / 12); let survivalRemM = Math.round(survivalMonths % 12);
+        let survivalMonthsTxt = survivalYears > 0 ? `${survivalYears} ปี ${survivalRemM} เดือน` : `${Math.round(survivalMonths)} เดือน`;
         
-        let survivalMonthsTxt = "";
-        if (survivalYears > 0) {
-            survivalMonthsTxt = `${survivalYears} ปี ${survivalRemM} เดือน`;
-        } else {
-            survivalMonthsTxt = `${Math.round(survivalMonths)} เดือน`;
-        }
         safeSetText('p-survival-months', survivalMonthsTxt);
         safeSetText('p-survival-assets-display', fmtNum(portfolioValue) + " ฿");
         
         let ratingEl = document.getElementById('p-survival-rating');
-        if (survivalMonths >= 60) {
-            ratingEl.innerText = "⭐ ระดับเทวทูต ออกไปท่องอวกาศได้เลย!";
-            ratingEl.className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full inline-block mt-2 transition-colors";
-        } else if (survivalMonths >= 24) {
-            ratingEl.innerText = "🛸 ระดับอวกาศชิล ๆ อยู่รอดสบายไป 2 ปี+";
-            ratingEl.className = "text-[10px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full inline-block mt-2 transition-colors";
-        } else if (survivalMonths >= 12) {
-            ratingEl.innerText = "🚀 ระดับพอไปวัดไปวา รอดไปได้ข้ามปี";
-            ratingEl.className = "text-[10px] font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full inline-block mt-2 transition-colors";
-        } else {
-            ratingEl.innerText = "💀 วิกฤต! รีบหาเงินเติมด่วน";
-            ratingEl.className = "text-[10px] font-bold bg-rose-100 text-rose-800 px-3 py-1 rounded-full inline-block mt-2 animate-pulse transition-colors";
-        }
+        if (survivalMonths >= 60) { ratingEl.innerText = "⭐ ระดับเทวทูต ออกไปท่องอวกาศได้เลย!"; ratingEl.className = "text-[10px] font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full inline-block mt-2"; } 
+        else if (survivalMonths >= 24) { ratingEl.innerText = "🛸 ระดับอวกาศชิล ๆ อยู่รอดสบายไป 2 ปี+"; ratingEl.className = "text-[10px] font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full inline-block mt-2"; } 
+        else if (survivalMonths >= 12) { ratingEl.innerText = "🚀 ระดับพอไปวัดไปวา รอดไปได้ข้ามปี"; ratingEl.className = "text-[10px] font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full inline-block mt-2"; } 
+        else { ratingEl.innerText = "💀 วิกฤต! รีบหาเงินเติมด่วน"; ratingEl.className = "text-[10px] font-bold bg-rose-100 text-rose-800 px-3 py-1 rounded-full inline-block mt-2 animate-pulse"; }
 
         let avgMonthlyDiv = totalDividendY / currentMonthInt;
         let freedomRate = avgMonthlyGenExp > 0 ? (avgMonthlyDiv / avgMonthlyGenExp) * 100 : 0;
@@ -1588,58 +1575,25 @@
         let wealthBase = portfolioValue; 
         let projectionData = [wealthBase];
         let currentTempWealth = wealthBase;
-        let annualGrowthRate = 0.07; 
-        let monthlyRate = annualGrowthRate / 12;
+        let annualGrowthRate = 0.07; let monthlyRate = annualGrowthRate / 12;
 
         for (let yr = 1; yr <= 5; yr++) {
-            for (let month = 1; month <= 12; month++) {
-                currentTempWealth = currentTempWealth * (1 + monthlyRate) + monthlyInvestmentAmt;
-            }
+            for (let month = 1; month <= 12; month++) { currentTempWealth = currentTempWealth * (1 + monthlyRate) + monthlyInvestmentAmt; }
             projectionData.push(Math.round(currentTempWealth));
         }
-
-        let finalWealth = projectionData[5];
-        safeSetText('p-wealth-final-huge', fmtCompact(finalWealth)); 
+        safeSetText('p-wealth-final-huge', fmtCompact(projectionData[5])); 
 
         if(wealthProjectionChart) wealthProjectionChart.destroy();
         wealthProjectionChart = new Chart(document.getElementById('wealthProjectionChart'), {
             type: 'line',
             data: {
                 labels: wealthLabels,
-                datasets: [{
-                    label: 'พอร์ตลงทุน (จำลอง)',
-                    data: projectionData,
-                    borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                    fill: true,
-                    tension: 0.25,
-                    borderWidth: 3,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#6366f1'
-                }]
+                datasets: [{ label: 'พอร์ตลงทุน (จำลอง)', data: projectionData, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.25, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '#6366f1' }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    datalabels: {
-                        display: true,
-                        align: 'top',
-                        color: '#4f46e5',
-                        font: { family: 'Sarabun', weight: 'bold', size: 10 },
-                        formatter: (val) => fmtCompact(val)
-                    }
-                },
-                scales: {
-                    y: {
-                        ticks: {
-                            callback: function(value) {
-                                return fmtCompact(value);
-                            }
-                        }
-                    }
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, datalabels: { display: true, align: 'top', color: '#4f46e5', font: { family: 'Sarabun', weight: 'bold', size: 10 }, formatter: (val) => fmtCompact(val) } },
+                scales: { y: { ticks: { callback: function(value) { return fmtCompact(value); } } } }
             }
         });
 
@@ -1651,17 +1605,13 @@
             data: { 
                 labels, 
                 datasets: [
-                    {label: 'รายรับรวม', data: incArr, borderColor: '#10b981', backgroundColor: '#10b981', borderWidth: 3, tension: 0.3}, 
-                    
+                    {label: 'รายรับจริง', data: incArr, borderColor: '#10b981', backgroundColor: '#10b981', borderWidth: 3, tension: 0.3}, 
                     {label: 'รายจ่ายรวม', data: expTotalArr, borderColor: '#ef4444', backgroundColor: '#ef4444', borderWidth: 3, tension: 0.3},
                     {label: 'จ่ายทั่วไป', data: genExpArr, borderColor: '#f43f5e', backgroundColor: 'transparent', borderDash: [5,5], borderWidth: 1.5, tension: 0.3},
                     {label: 'จ่ายลงทุน', data: invExpArr, borderColor: '#3b82f6', backgroundColor: 'transparent', borderDash: [5,5], borderWidth: 1.5, tension: 0.3}
                 ] 
             }, 
-            options: {
-                responsive:true, maintainAspectRatio:false,
-                plugins: { legend: { position: 'bottom', labels: {font: {family: 'Sarabun', size: 10}, boxWidth: 12} } }
-            } 
+            options: { responsive:true, maintainAspectRatio:false, plugins: { legend: { position: 'bottom', labels: {font: {family: 'Sarabun', size: 10}, boxWidth: 12} } } } 
         });
         
         let qArr = [ incArr[0]+incArr[1]+incArr[2], incArr[3]+incArr[4]+incArr[5], incArr[6]+incArr[7]+incArr[8], incArr[9]+incArr[10]+incArr[11] ];
@@ -1669,7 +1619,7 @@
         let prevIncArr = Array(12).fill(0);
         for(let mIdx=1; mIdx<=12; mIdx++) {
             let mStr = String(mIdx).padStart(2,'0');
-            prevIncArr[mIdx-1] = incomeData.filter(d=>d.year===prevY && d.month===mStr).reduce((s,i)=>s+i.amount,0);
+            prevIncArr[mIdx-1] = incomeData.filter(d=>d.year===prevY && d.month===mStr).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
         }
         let prevQArr = [ prevIncArr[0]+prevIncArr[1]+prevIncArr[2], prevIncArr[3]+prevIncArr[4]+prevIncArr[5], prevIncArr[6]+prevIncArr[7]+prevIncArr[8], prevIncArr[9]+prevIncArr[10]+prevIncArr[11] ];
         let qColors = qArr.map(v => v > 90000 ? '#10b981' : '#f43f5e');
@@ -1702,22 +1652,17 @@
             let yrStr = yr.toString();
             for(let mIdx=1; mIdx<=12; mIdx++) {
                 if(yr === endYearAll && mIdx > (new Date().getMonth() + 1)) continue;
-                
                 let mStr = String(mIdx).padStart(2,'0');
-                let miTot = incomeData.filter(d=>d.year===yrStr && d.month===mStr).reduce((s,i)=>s+i.amount,0);
-
+                let miTot = incomeData.filter(d=>d.year===yrStr && d.month===mStr).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
                 let px = personalExpenseData.find(d=> d.year===yrStr && d.month===mStr) || {}; 
                 let calcStocks = calculateMonthlyStockInvestments(yrStr, mStr);
-                
                 let invE = calcStocks + (px.gameAun !== undefined ? px.gameAun : 20000);
                 let genE = (px.eating || 0) + (px.creditCard || 0) + (px.rent || 0) + (px.personal || 0) + (px.otherExt || 0);
                 let expTot = invE + genE;
                 
                 if (yr === startYearAll && miTot === 0 && expTot === 0 && atIncTot.length === 0) continue;
-
                 allTimeLabels.push(`${mShortThai[mIdx-1]} ${String(yr+543).substring(2)}`);
-                atIncTot.push(miTot);
-                atExpTot.push(expTot); atExpGen.push(genE); atExpInv.push(invE);
+                atIncTot.push(miTot); atExpTot.push(expTot); atExpGen.push(genE); atExpInv.push(invE);
             }
         }
         if(dashAllTimeCashflowChart) dashAllTimeCashflowChart.destroy();
@@ -1726,7 +1671,7 @@
             data: {
                 labels: allTimeLabels,
                 datasets: [
-                    { label: 'รายรับรวม', data: atIncTot, borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.05)', fill: true, tension: 0.2, borderWidth: 2.5 },
+                    { label: 'รายรับจริง', data: atIncTot, borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.05)', fill: true, tension: 0.2, borderWidth: 2.5 },
                     { label: 'รายจ่ายรวม', data: atExpTot, borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.05)', fill: true, tension: 0.2, borderWidth: 2.5 },
                     { label: 'จ่ายทั่วไป', data: atExpGen, borderColor: '#f43f5e', borderDash: [4,4], tension: 0.2, borderWidth: 1.5 },
                     { label: 'จ่ายลงทุน', data: atExpInv, borderColor: '#2563eb', borderDash: [4,4], tension: 0.2, borderWidth: 1.5 }
@@ -1739,29 +1684,24 @@
             }
         });
 
-        let typeSums = {};
-        incomeData.filter(d=>d.year===y).forEach(i=> { typeSums[i.type] = (typeSums[i.type]||0)+i.amount; });
-        
-        const typeColors = ['#6366f1','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#14b8a6'];
-        let typeLabels = Object.keys(typeSums);
-        let typeData = Object.values(typeSums);
-
         if(dashIncomeTypeChart) dashIncomeTypeChart.destroy(); 
         dashIncomeTypeChart = new Chart(document.getElementById('dashIncomeTypeChart'), { 
             type: 'doughnut', 
-            data: { labels: typeLabels, datasets: [{data: typeData, backgroundColor: typeColors}] }, 
-            options: {responsive:true, maintainAspectRatio:false, plugins:{ datalabels: { display: true, color: '#fff', font: {family: 'Sarabun', weight: 'bold'}, formatter: (value, ctx) => { let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); if(sum===0||value===0) return ''; return (value*100/sum).toFixed(1)+'%'; } }, legend:{display:false}}} 
+            data: { labels: ["รายรับจริง"], datasets: [{data: [totalIncY], backgroundColor: ['#10b981']}] }, 
+            options: {responsive:true, maintainAspectRatio:false, plugins:{ datalabels: { display: true, color: '#fff', font: {family: 'Sarabun', weight: 'bold'}, formatter: () => '100%' }, legend:{display:false}}} 
         });
 
-        let incListHtml = `<ul class="space-y-2">`;
-        let totalIncSum = typeData.reduce((a,b)=>a+b,0);
-        typeLabels.forEach((label, idx) => {
-            if(typeData[idx] > 0) {
-                incListHtml += `<li class="flex justify-between items-center text-xs font-bold"><div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background-color:${typeColors[idx%typeColors.length]}"></span><span class="text-slate-600">${label}</span></div><span class="text-slate-900">${fmtNum(typeData[idx])} ฿</span></li>`;
-            }
-        });
-        incListHtml += `<li class="flex justify-between items-center text-sm font-black pt-2 border-t border-slate-200 mt-2"><span class="text-slate-700">รวมทั้งหมด</span><span class="text-emerald-600">${fmtNum(totalIncSum)} ฿</span></li></ul>`;
-        document.getElementById('dash-income-type-list').innerHTML = incListHtml;
+        document.getElementById('dash-income-type-list').innerHTML = `
+            <ul class="space-y-2">
+                <li class="flex justify-between items-center text-xs font-bold">
+                    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500"></span><span class="text-slate-600">รายรับจริงหลังหักสำรอง (สะสมปีนี้)</span></div>
+                    <span class="text-slate-900">${fmtNum(totalIncY)} ฿</span>
+                </li>
+                <li class="flex justify-between items-center text-sm font-black pt-2 border-t border-slate-200 mt-2">
+                    <span class="text-slate-700">รวมรายรับสุทธิ</span>
+                    <span class="text-emerald-600">${fmtNum(totalIncY)} ฿</span>
+                </li>
+            </ul>`;
 
         let exTot = {eating:0, creditCard:0, rent:0, personal:0, stocks:0, gameAun:0, otherExt:0};
         personalExpenseData.filter(d=>d.year===y).forEach(p=>{ exTot.eating+=p.eating||0; exTot.creditCard+=p.creditCard||0; exTot.rent+=p.rent||0; exTot.personal+=p.personal||0; exTot.stocks+=calculateMonthlyStockInvestments(y, p.month); exTot.gameAun+= (p.gameAun !== undefined ? p.gameAun : 20000); exTot.otherExt+=p.otherExt||0; });
@@ -1825,101 +1765,59 @@
             data: { labels, datasets: [{label:'% เติบโต', data:growthPctArr, borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.2)', fill:true, tension:0.3}] }, 
             options: {
                 responsive:true, maintainAspectRatio:false, 
-                plugins:{
-                    legend:{display:false},
-                    datalabels: { display: true, align: 'top', color: '#6366f1', font: {size: 9, weight: 'bold'}, formatter: (val) => val !== 0 ? val.toFixed(1)+'%' : '' }
-                }
+                plugins:{ legend:{display:false}, datalabels: { display: true, align: 'top', color: '#6366f1', font: {size: 9, weight: 'bold'}, formatter: (val) => val !== 0 ? val.toFixed(1)+'%' : '' } }
             } 
         });
 
         let divThArr = Array(12).fill(0), divUsArr = Array(12).fill(0), divFundArr = Array(12).fill(0), divBankArr = Array(12).fill(0), divOtherArr = Array(12).fill(0);
-        let totalDiv = 0, tTh=0, tUs=0, tFund=0, tBank=0, tOth=0;
-        
+        let totalDiv = 0;
         stockData.filter(s => s.year === y && s.type === 'DIVIDEND').forEach(s => {
-            let mIdx = parseInt(s.month) - 1;
-            let v = s.currency === 'USD' ? s.price * USD_TO_THB : s.price;
-            totalDiv += v;
-            if(stockQuickList.th.includes(s.name)) { divThArr[mIdx] += v; tTh += v; }
-            else if(stockQuickList.us.includes(s.name)) { divUsArr[mIdx] += v; tUs += v; }
-            else if(stockQuickList.fund.includes(s.name)) { divFundArr[mIdx] += v; tFund += v; }
-            else if(stockQuickList.bank && stockQuickList.bank.includes(s.name)) { divBankArr[mIdx] += v; tBank += v; }
-            else { divOtherArr[mIdx] += v; tOth += v; }
+            let mIdx = parseInt(s.month) - 1; let v = s.currency === 'USD' ? s.price * USD_TO_THB : s.price; totalDiv += v;
+            if(stockQuickList.th.includes(s.name)) { divThArr[mIdx] += v; }
+            else if(stockQuickList.us.includes(s.name)) { divUsArr[mIdx] += v; }
+            else if(stockQuickList.fund.includes(s.name)) { divFundArr[mIdx] += v; }
+            else if(stockQuickList.bank && stockQuickList.bank.includes(s.name)) { divBankArr[mIdx] += v; }
+            else { divOtherArr[mIdx] += v; }
         });
-        
-        document.getElementById('dash-dividend-text').innerHTML = `
-            <div class="text-blue-800 text-base font-black font-sarabun">ปันผลรวม: ${fmtNum(totalDiv)} ฿</div>
-        `;
+        document.getElementById('dash-dividend-text').innerHTML = `<div class="text-blue-800 text-base font-black">ปันผลรวม: ${fmtNum(totalDiv)} ฿</div>`;
         
         if(dashDividendChart) dashDividendChart.destroy(); 
         dashDividendChart = new Chart(document.getElementById('dashDividendChart'), { 
             type: 'bar', 
-            data: { 
-                labels, 
-                datasets: [
-                    {label: 'ไทย', data: divThArr, backgroundColor: '#f59e0b'},
-                    {label: 'US', data: divUsArr, backgroundColor: '#3b82f6'},
-                    {label: 'กองทุน', data: divFundArr, backgroundColor: '#10b981'},
-                    {label: 'แบงก์', data: divBankArr, backgroundColor: '#8b5cf6'},
-                    {label: 'อื่นๆ', data: divOtherArr, backgroundColor: '#cbd5e1'}
-                ] 
-            }, 
-            options: { 
-                responsive: true, maintainAspectRatio: false, 
-                scales: { x: { stacked: true }, y: { stacked: true } },
-                plugins: { 
-                    legend: { display: true, position: 'bottom', labels: {font: {family: 'Sarabun', size: 10}, boxWidth: 12} }
-                } 
-            } 
+            data: { labels, datasets: [ {label: 'ไทย', data: divThArr, backgroundColor: '#f59e0b'}, {label: 'US', data: divUsArr, backgroundColor: '#3b82f6'}, {label: 'กองทุน', data: divFundArr, backgroundColor: '#10b981'}, {label: 'แบงก์', data: divBankArr, backgroundColor: '#8b5cf6'}, {label: 'อื่นๆ', data: divOtherArr, backgroundColor: '#cbd5e1'} ] }, 
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } }, plugins: { legend: { display: true, position: 'bottom', labels: {font: {family: 'Sarabun', size: 10}, boxWidth: 12} } } } 
         });
 
-        function calcYearSums(yr) { let totalI = incomeData.filter(d=>d.year===yr).reduce((s,i)=>s+i.amount,0); let totalE = 0; personalExpenseData.filter(d=>d.year===yr).forEach(p=>{ totalE += (p.eating||0)+(p.creditCard||0)+(p.rent||0)+(p.personal||0)+(calculateMonthlyStockInvestments(yr, p.month))+(p.gameAun !== undefined ? p.gameAun : 20000)+(p.otherExt||0); }); return {i: totalI, e: totalE}; }
+        function calcYearSums(yr) { 
+            let totalI = incomeData.filter(d=>d.year===yr).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0); 
+            let totalE = 0; personalExpenseData.filter(d=>d.year===yr).forEach(p=>{ totalE += (p.eating||0)+(p.creditCard||0)+(p.rent||0)+(p.personal||0)+(calculateMonthlyStockInvestments(yr, p.month))+(p.gameAun !== undefined ? p.gameAun : 20000)+(p.otherExt||0); }); 
+            return {i: totalI, e: totalE}; 
+        }
         let sumsCur = calcYearSums(y); let incCur = sumsCur.i; let expCur = sumsCur.e; let netCur = incCur - expCur;
         let sumsPrev = calcYearSums(prevY); let incPrev = sumsPrev.i; let expPrev = sumsPrev.e; let netPrev = incPrev - expPrev;
         
         safeSetText('dash-yoy-title', `เปรียบเทียบ ปี ${parseInt(y)+543} VS ปี ${parseInt(prevY)+543}`);
-        
         let incDiffPct = incPrev > 0 ? ((incCur - incPrev) / incPrev * 100).toFixed(1) : 0;
         let netDiffPct = netPrev !== 0 ? ((netCur - netPrev) / Math.abs(netPrev) * 100).toFixed(1) : 0;
-        
         let incDiffText = incDiffPct >= 0 ? `<span class="text-emerald-600">🔼 +${incDiffPct}%</span>` : `<span class="text-rose-600">🔽 ${incDiffPct}%</span>`;
         let netDiffText = netDiffPct >= 0 ? `<span class="text-emerald-600">🔼 +${netDiffPct}%</span>` : `<span class="text-rose-600">🔽 ${netDiffPct}%</span>`;
-        
         document.getElementById('dash-yoy-diff-text').innerHTML = `รับรวม ${incDiffText} | คงเหลือ ${netDiffText}`;
 
         if(dashYoYChart) dashYoYChart.destroy(); 
         dashYoYChart = new Chart(document.getElementById('dashYoYChart'), { 
             type: 'bar', 
-            data: { 
-                labels: ['รายรับรวม', 'รายจ่ายรวม', 'คงเหลือสุทธิ'], 
-                datasets: [ 
-                    {label:`ปี ${parseInt(prevY)+543}`, data:[incPrev, expPrev, netPrev], backgroundColor:'#cbd5e1'}, 
-                    {label:`ปี ${parseInt(y)+543}`, data:[incCur, expCur, netCur], backgroundColor:['#10b981', '#f43f5e', '#3b82f6']} 
-                ] 
-            }, 
-            options: {
-                responsive:true, maintainAspectRatio:false,
-                plugins: {
-                    legend: { position: 'bottom', labels: {font: {size:10}} },
-                    datalabels: { display: true, align: 'end', anchor: 'end', color: '#475569', font: {size: 10, weight: 'bold'}, formatter: (val) => fmtCompact(val) } 
-                }
-            } 
+            data: { labels: ['รายรับรวม', 'รายจ่ายรวม', 'คงเหลือสุทธิ'], datasets: [ {label:`ปี ${parseInt(prevY)+543}`, data:[incPrev, expPrev, netPrev], backgroundColor:'#cbd5e1'}, {label:`ปี ${parseInt(y)+543}`, data:[incCur, expCur, netCur], backgroundColor:['#10b981', '#f43f5e', '#3b82f6']} ] }, 
+            options: { responsive:true, maintainAspectRatio:false, plugins: { legend: { position: 'bottom', labels: {font: {size:10}} }, datalabels: { display: true, align: 'end', anchor: 'end', color: '#475569', font: {size: 10, weight: 'bold'}, formatter: (val) => fmtCompact(val) } } } 
         });
 
-        let startYearNum = 2023; 
-        let curYearNum = new Date().getFullYear();
-        let yearLabels = [];
-        let yearlyIncData = [];
-        
+        let startYearNum = 2023; let curYearNum = new Date().getFullYear();
+        let yearLabels = []; let yearlyIncData = [];
         for(let yr = startYearNum; yr <= curYearNum; yr++) {
-            let yrStr = yr.toString();
-            yearLabels.push('ปี ' + (yr + 543));
-            let totalI = incomeData.filter(d=>d.year===yrStr).reduce((s,i)=>s+i.amount,0);
+            let yrStr = yr.toString(); yearLabels.push('ปี ' + (yr + 543));
+            let totalI = incomeData.filter(d=>d.year===yrStr).reduce((s,i)=>s+(i.realIncome || (i.amount - i.reserve)),0);
             yearlyIncData.push(totalI);
         }
-
-        let datasetYearly = [
-            {type: 'bar', label: 'รายรับรวม', data: yearlyIncData, backgroundColor: 'rgba(16, 185, 129, 0.2)', borderColor: '#10b981', borderWidth: 2, order: 10}
-        ];
+        let datasetYearly = [ {type: 'bar', label: 'รายรับจริงรวม', data: yearlyIncData, backgroundColor: 'rgba(16, 185, 129, 0.2)', borderColor: '#10b981', borderWidth: 2} ];
 
         if(dashYearlyIncomeChart) dashYearlyIncomeChart.destroy(); 
         dashYearlyIncomeChart = new Chart(document.getElementById('dashYearlyIncomeChart'), { 
@@ -1928,8 +1826,8 @@
             options: { 
                 responsive: true, maintainAspectRatio: false, 
                 plugins: { 
-                    datalabels: { display: function(ctx) { return ctx.dataset.type === 'bar'; }, align: 'top', anchor: 'end', color: '#10b981', font: {family: 'Sarabun', weight: 'black'}, formatter: (val) => val > 0 ? fmtCompact(val) : '' },
-                    legend: { position: 'bottom', labels: {font: {size: 10, family: 'Sarabun'}, usePointStyle: true, boxWidth: 8} }
+                    datalabels: { display: true, align: 'top', anchor: 'end', color: '#10b981', font: {family: 'Sarabun', weight: 'black'}, formatter: (val) => val > 0 ? fmtCompact(val) : '' },
+                    legend: { position: 'bottom', labels: {font: {size: 10, family: 'Sarabun'}} }
                 },
                 scales: { y: { beginAtZero: true } }
             } 
@@ -1937,15 +1835,12 @@
     }
 
     function deleteData(id, target) {
-        showCustomConfirm("⚠️ ยืนยันการลบข้อมูล", "แน่ใจนะว่าจะลบรายการนี้? ลบแล้วกู้คืนแบบปกติไม่ได้นะ!", () => {
+        showCustomConfirm("⚠️ ยืนยันการลบข้อมูล", "แน่ใจนะว่าจะลบรายการนี้?", () => {
             if (target === 'inc') incomeData = incomeData.filter(x => x.id !== id);
             if (target === 'stk') stockData = stockData.filter(x => x.id !== id);
-            saveData();
-            refreshAll();
-            showNotification("🗑️ ลบข้อมูลเรียบร้อย!");
+            saveData(); refreshAll(); showNotification("🗑️ ลบข้อมูลเรียบร้อย!");
         });
     }
-
 </script>
 </body>
 </html>
